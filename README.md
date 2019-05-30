@@ -1,6 +1,7 @@
 <p align="center"><img src="./igor-matheus.png"></img></p>
 
 # Automata
+
 **Just a bunch of machines which can process a bunch of words.**
 
 According to the [Automaton Wikipedia page](https://en.wikipedia.org/wiki/Automaton), an automaton "is a self-operating machine, or a machine or control mechanism designed to automatically follow a predetermined sequence of operations, or respond to predetermined instructions." If we navigate to the [Automata theory Wikipedia page](https://en.wikipedia.org/wiki/Automata_theory), we are going to see that a type of automaton is the finite one, which is the focus of this repository. Under this page, we can see that a finite automaton is a finite-state machine, which, by its turn, "belongs to a well-known type of automaton".
