@@ -73,7 +73,7 @@ def from_txt(automaton,verbose=False):
 		transition_strings = [item.strip("\n").split(", ") for item in file.readlines()]
 		for item in transition_strings:
 			if (item[0],item[1]) not in transitions.keys(): transitions[(item[0],item[1])] = []
-			transitions[(item[0],item[1])] += item[2:]
+			transitions[(item[0],item[1])] += [i.strip("{").strip("}") for i in item[2:]]
 		if verbose == True: print(transitions)
 		for transition in transitions.keys(): transitions[transition] = tuple(transitions[transition])
 
