@@ -1,6 +1,7 @@
-from automata.finiteAutomaton import finiteAutomaton
+from automata.fa import finiteAutomaton
+
 class deterministicFiniteAutomaton(finiteAutomaton):
-	"""A Deterministic Finite Automaton class to be inherited by the DFA, NFA and NFAE subclasses."""
+	"""A Deterministic Finite Automaton class, which inherits from finiteAutomaton."""
 	def __init__(self,properties):
 		"""Class constructor.
 
