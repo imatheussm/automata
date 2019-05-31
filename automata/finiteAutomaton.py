@@ -9,7 +9,8 @@ class finiteAutomaton:
 		Returns
 		-------
 		"""
-		self.properties  = properties
+		try: self.properties = dict(properties)
+		except: raise TypeError("The properties parameter provided doesnt't seem to be a dictionary.")
 
 	def __repr__(self):
 		return "<{} object>\n      Symbols: {}\n       States: {}\n\
