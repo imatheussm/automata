@@ -11,5 +11,5 @@ class deterministicFiniteAutomaton(finiteAutomaton):
 		-------
 		"""
 		super().__init__(properties)
-		for destinations in self.properties["transitions"].values():
-			if len(destinations)>1 or "ε" in destinations: raise TypeError("This automaton is not deterministic.")
+		for (origins, destinations) in self.properties["transitions"].items():
+			if len(destinations)>1 or "ε" in origins: raise TypeError("This automaton is not deterministic.")
