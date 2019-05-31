@@ -1,4 +1,4 @@
-from automata.finiteAutomaton import *
+from automata.deterministicFiniteAutomaton import *
 
 def from_txt(automaton,verbose=False):
 	"""
