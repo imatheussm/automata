@@ -5,3 +5,4 @@
 .vs/automata/v16/.suo
 automata/__pycache__/__init__.cpython-37.pyc
 automata/__pycache__/finiteAutomaton.cpython-37.pyc
+automata/__pycache__/deterministicFiniteAutomaton.cpython-37.pyc
