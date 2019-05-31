@@ -1,4 +1,6 @@
-from automata.deterministicFiniteAutomaton import *
+from automata.dfa import *
+from automata.nfa import *
+from automata.nfae import *
 
 def from_txt(automaton,verbose=False):
 	"""Converts a .txt file containing the automaton's properties into a finiteAutomaton (sub)class.
@@ -68,10 +70,10 @@ def from_txt(automaton,verbose=False):
 
 		# Processing the transitions
 		transitions = {}
-		transition_strings = [line.strip("\n").split(", ") for line in file.readlines()]
+		transition_strings = [item.strip("\n").split(", ") for item in file.readlines()]
 		for item in transition_strings:
 			if (item[0],item[1]) not in transitions.keys(): transitions[(item[0],item[1])] = []
-			transitions[(item[0],item[1])].append(item[2])
+			transitions[(item[0],item[1])] += item[2:]
 		if verbose == True: print(transitions)
 		for transition in transitions.keys(): transitions[transition] = tuple(transitions[transition])
 
