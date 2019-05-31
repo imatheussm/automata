@@ -1,7 +1,25 @@
 from automata.deterministicFiniteAutomaton import *
 
 def from_txt(automaton,verbose=False):
-	"""
+	"""Converts a .txt file containing the automaton's properties into a finiteAutomaton (sub)class.
+
+	Parameters
+	----------
+	automaton : str (path)
+		The path to the .txt file containing the automaton's properties.
+
+		Example: ({0, 1}, {q0, q1}, S, q0, {q0})
+				 q0, 1, q0
+				 q0, 0, q1
+				 q1, 0, q0
+				 q1, 1, q1
+	verbose : bool (default = False)
+		If set to True, useful information about the treatment process will be printed as the function deals with the automaton file.
+
+	Returns
+	-------
+	finiteAutomaton, deterministicFiniteAutomaton, nondeterministicFiniteAutomaton, nondeterministicFiniteAutomatonWithEMoves
+		An automaton object of one of the aforementioned (sub)classes, depending on the properties stipulated.
 	"""
 
 	order = ["symbols", "states", "transitions", "initial_state", "final_states"]
