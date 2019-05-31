@@ -5,3 +5,4 @@ from automata import *
 
 #a = finiteAutomaton("./dfa/sample.txt")
 a = from_txt("./dfa/sample.txt")
+b = deterministicFiniteAutomaton(a)
