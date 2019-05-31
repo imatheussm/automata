@@ -25,4 +25,6 @@ class nondeterministicFiniteAutomaton(finiteAutomaton):
 		"""
 		super().__init__(properties)
 		for (origins, destinations) in self.properties["transitions"].items():
-			if sum(origins)/2!=sum(destinations): raise TypeError("This automaton is not nondeterministic.")
+			print("len(origins): {}".format(len(origins)))
+			print("sum([len(item) for item in destinations]): {}".format(sum([len(item) for item in destinations])))
+			if len(origins)!=sum([len(item) for item in destinations]): raise TypeError("This automaton is not nondeterministic.")
