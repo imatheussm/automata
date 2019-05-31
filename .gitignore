@@ -6,3 +6,9 @@
 automata/__pycache__/__init__.cpython-37.pyc
 automata/__pycache__/finiteAutomaton.cpython-37.pyc
 automata/__pycache__/deterministicFiniteAutomaton.cpython-37.pyc
+automata/__pycache__/nondeterministicFiniteAutomatonWithEMoves.cpython-37.pyc
+automata/__pycache__/nondeterministicFiniteAutomaton.cpython-37.pyc
+automata/__pycache__/nfae.cpython-37.pyc
+automata/__pycache__/nfa.cpython-37.pyc
+automata/__pycache__/fa.cpython-37.pyc
+automata/__pycache__/dfa.cpython-37.pyc
