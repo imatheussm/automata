@@ -5,6 +5,6 @@ from automata import *
 
 #a = finiteAutomaton("./dfa/sample.txt")
 a = from_txt("./dfa/dfa2.txt")
-#b = deterministicFiniteAutomaton(a)
+b = deterministicFiniteAutomaton(a)
 
-c = from_txt("./nfa/nfa1.txt",True)
+c = from_txt("./nfa/nfa1.txt")
