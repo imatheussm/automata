@@ -1,0 +1,7 @@
+({a, b}, {q0, q1, q2, qf}, S, q0, {qf})
+q0, a, {q0, q1}
+q0, b, {q0, q2}
+q1, a, {qf}
+q2, b, {qf}
+qf, a, {qf}
+qf, b, {qf}
