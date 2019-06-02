@@ -9,3 +9,6 @@ b = deterministicFiniteAutomaton(a)
 
 c = from_txt("./nfa/nfa1.txt")
 d = nondeterministicFiniteAutomaton(c)
+
+e = from_txt("./nfae/nfae1.txt")
+f = nondeterministicFiniteAutomatonWithEMoves(e)
