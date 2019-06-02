@@ -24,7 +24,9 @@ class nondeterministicFiniteAutomaton(finiteAutomaton):
 			A nondeterministicFiniteAutomaton object with the stipulated properties.
 		"""
 		super().__init__(properties)
+		is_nondeterministic = False
 		for (origins, destinations) in self.properties["transitions"].items():
-			print("len(origins): {}".format(len(origins)))
-			print("sum([len(item) for item in destinations]): {}".format(sum([len(item) for item in destinations])))
-			if len(origins)!=sum([len(item) for item in destinations]): raise TypeError("This automaton is not nondeterministic.")
+			if len(destinations)>1: is_nondeterministic = True
+			if "ε" in origins: raise TypeError("This automaton has empty moves.")
+		if not is_nondeterministic: raise TypeError("This automaton is deterministic.")
+		else: del(is_nondeterministic)
