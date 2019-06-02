@@ -95,6 +95,13 @@ class finiteAutomaton:
 			The word to be processed.
 		current_states : tuple(str), str, NoneType (default = None)
 			The state to be processed.
+		verbose : bool
+			Serves to tell the function if print statements should be displayed as the word is processed.
+
+		Returns
+		-------
+		bool
+			The result of the processing. In other words: if the word has been accepted by the automaton or not.
 		"""
 		is_final = False
 
