@@ -23,7 +23,39 @@ class finiteAutomaton:
 		try: self.properties = dict(properties)
 		except: raise TypeError("The properties parameter provided doesnt't seem to be a dictionary.")
 
+	def __eq__(self,other):
+		"""Checks if two finiteAutomaton objects are the same.
+
+		It will attempt to access the properties dict both provided objects and then compare them. In case it fails to find this attribute or they are not the same, it will return False. Otherwise, True will be returned by it.
+
+		Parameters
+		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses)
+		other : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses)
+
+		Returns
+		-------
+		bool
+			The result of the comparison
+		"""
+		try: return self.properties == other.properties and self.properties["transitions"] == other.properties["transitions"]
+		except: return False
+
 	def __repr__(self):
+		"""finiteAutomaton general representation.
+
+		Parameters
+		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses)
+
+		Returns
+		-------
+		str
+			The string representation of the object, which will be printed out.
+		"""
 		return "<{} object>\n      Symbols: {}\n       States: {}\n\
   Transitions: {}\nInitial State: {}\n Final States: {}".format(str(type(self)).split("'")[1],
 																", ".join(self.properties["symbols"]),
