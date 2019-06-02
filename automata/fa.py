@@ -104,14 +104,15 @@ class finiteAutomaton:
 		new_current_states = []
 		for current_state in current_states:
 			if verbose==True: print("[LINE 106] Attempting to process ({},{})".format(current_state,word[0]))
-			new_current_states += list(self.process_symbol(current_state,word[0]))
-		current_states = tuple(filter(lambda x: x is not None,new_current_states))
+			try: new_current_states += list(self.process_symbol(current_state,word[0]))
+			except: pass
+		current_states = tuple(new_current_states)
 		del(new_current_states)
 		if len(word) > 1:
 			if verbose==True: print("[LINE 111] Remaining symbols to be processed: {}\n".format(word))
 			return self.process_word(word[1:],current_states=current_states,verbose=verbose)
 		else:
-			if verbose==True: print("[LINE 114] Final states found: {}".format(current_states))
+			if verbose==True: print("\n\n[LINE 114] Final states found: {}\n".format(current_states))
 			for state in current_states:
 				if state in self.properties["final_states"]:
 					if verbose==True: print("[LINE 117] The state {} is final.".format(state))
@@ -119,7 +120,7 @@ class finiteAutomaton:
 				else:
 					if verbose==True: print("[LINE 119] The state {} is not final.".format(state))
 			if is_final == True:
-				if verbose==True: print("[LINE 120] The word has been accepted. The function returns ",end="")
+				if verbose==True: print("\n[LINE 120] The word has been accepted. The function returns ",end="")
 			else:
-				if verbose==True: print("[LINE 121] The word has not been accepted. The function returns ",end="")
+				if verbose==True: print("\n[LINE 121] The word has not been accepted. The function returns ",end="")
 			return is_final
