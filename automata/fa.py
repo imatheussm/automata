@@ -109,7 +109,7 @@ class finiteAutomaton:
 		current_states = tuple(new_current_states)
 		del(new_current_states)
 		if len(word) > 1:
-			if verbose==True: print("[LINE 111] Remaining symbols to be processed: {}\n".format(word))
+			if verbose==True: print("[LINE 111] Remaining symbols to be processed: {}\n".format(word[1:]))
 			return self.process_word(word[1:],current_states=current_states,verbose=verbose)
 		else:
 			if verbose==True: print("\n\n[LINE 114] Final states found: {}\n".format(current_states))
