@@ -45,19 +45,29 @@ class finiteAutomaton:
 		try: self.properties = dict(properties)
 		except: raise TypeError("The properties parameter provided doesnt't seem to be a dictionary.")
 
-	def __repr__(self):
+	def __repr__(self,alt_display=True):
 		"""finiteAutomaton general representation.
 
 		Parameters
 		----------
 		self : finiteAutomaton
 			An object of the class finiteAutomaton (or any of its subclasses).
+		extended : bool
+			Serves to tell the method if you want the extended version of the representation by default or not.
 
 		Returns
 		-------
 		str
 			The string representation of the object, which will be printed out.
 		"""
+		if alt_display==True:
+			return "<{} object>\nAutomaton: ({{{}}}, {{{}}}, {}, {}, {{{}}})\n\nTransitions:\n{}".format(str(type(self)).split("'")[1],
+																										 ", ".join(self.properties["symbols"]),
+																										 ", ".join(self.properties["states"]),
+																										 "δ",
+																										 self.properties["initial_state"],
+																										 ", ".join(self.properties["final_states"]),
+																										 self.transitions(True))
 		return "<{} object>\n      Symbols: {}\n       States: {}\n\
   Transitions: {}\nInitial State: {}\n Final States: {}".format(str(type(self)).split("'")[1],
 																", ".join(self.properties["symbols"]),
@@ -134,21 +144,24 @@ class finiteAutomaton:
 				if verbose==True: print("\n[LINE 121] The word has not been accepted. The function returns ",end="")
 			return is_final
 
-	def transitions(self):
+	def transitions(self,to_str=False):
 		"""Prints the transitions in a transition table format.
 
 		Parameters
 		----------
 		self : finiteAutomaton
 			An object of the class finiteAutomaton (or any of its subclasses).
+		to_str : bool (default = False)
+			This serves to tell the method if you want a string object to be returned instead of just printing the transitions.
 		"""
+		string = []
 		column_titles, space = ["δ"] + list(self.properties["symbols"]), max([len(item) for item in self.properties["transitions"].values()]) * 4 + 3
 		column_titles[0] = int((space)/2)*" " + column_titles[0] + int((space)/2)*" "
 		for (origins, destinations) in self.properties["transitions"].items():
 			if "ε" in origins:
 				column_titles.append("ε")
 				break
-		print("|".join(["{1:^{0}}".format(space,element) for element in column_titles]))
+		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles])))
 		i, line= 1, []
 		for (state, symbol) in list(product(self.properties["states"],column_titles[1:])):
 			#print("[LINE 154] ({}, {})".format(state,symbol))
@@ -160,8 +173,10 @@ class finiteAutomaton:
 				i+=1
 			else:
 				#print("[LINE 161] Printing...")
-				print("|".join(["{1:^{0}}".format(space,element) for element in line]))
+				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 				i,line = 2, ["{1:^{0}}".format(space,state)]
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
 				except: line.append("{1:^{0}}".format(space,", ".join("-")))
-		print("|".join(["{1:^{0}}".format(space,element) for element in line]))
+		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
+		if to_str==True: return "\n".join(string)
+		else: print("\n".join(string))
