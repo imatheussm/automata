@@ -23,5 +23,8 @@ class nondeterministicFiniteAutomatonWithEMoves(finiteAutomaton):
 			A nondeterministicFiniteAutomatonWithEMoves object with the stipulated properties.
 		"""
 		super().__init__(properties)
+		empty_moves = False
 		for (origins, destinations) in self.properties["transitions"].items():
-			if "ε" not in origins: raise TypeError("This automaton does not have ε-moves.")
+			if "ε" in origins: empty_moves = True
+		if empty_moves == False: raise TypeError("This automaton does not have ε-moves.")
+		else: del(empty_moves)
