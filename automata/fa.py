@@ -63,3 +63,29 @@ class finiteAutomaton:
 																str(self.properties["transitions"]),
 																self.properties["initial_state"],
 																", ".join(self.properties["final_states"]))
+
+	def process(self,word,current_states=None):
+		"""Checks if a word can be processed by the finiteAutomaton object.
+
+		Parameters
+		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses).
+		word : str
+			The word to be processed.
+		"""
+		if current_states == None: current_states = self.properties["initial_state"]
+		print("[LINE 78] Current state: {}".format(current_states))
+		if word[0] not in self.properties["symbols"]: raise ValueError("The word provided contains symbols which are not in this automaton's alphabet.")
+		try:
+			print("[LINE 81] Attempting to process ({},{})".format(current_states,word[0]))
+			current_states = self.properties["transitions"][(current_states,word[0])]
+		except: return False
+		if len(word)>1:
+			results = [self.process(word[1:],current_states=current_state) for current_state in current_states]
+			if True in results: return True
+			else: return False
+		else:
+			for current_state in current_states:
+				if current_state in self.properties["final_states"]: return True
+			return False
