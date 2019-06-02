@@ -131,3 +131,21 @@ class finiteAutomaton:
 			else:
 				if verbose==True: print("\n[LINE 121] The word has not been accepted. The function returns ",end="")
 			return is_final
+
+	def transitions(self):
+		"""Prints the transitions in a transition table format.
+
+		Parameters
+		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses).
+		"""
+		column_titles, space = ["δ"] + list(self.properties["symbols"]), max([len(item) for item in self.properties["transitions"].values()]) * 4 + 3
+		column_titles[0] = int((space)/2)*" " + column_titles[0] + int((space)/2)*" "
+		for (origins, destinations) in self.properties["transitions"].items():
+			if "ε" in origins:
+				column_titles.append("ε")
+				break
+		print("|".join(["{1:^{0}}".format(space,element) for element in column_titles]))
+		#for (origins, destinations) in self.properties["transitions"].items():	   #   ERRADO ERRADO   #
+		#	print("|".join(["{1:^{0}}".format(space,element) for element in (origins + destinations)]))#
