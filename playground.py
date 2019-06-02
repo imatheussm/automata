@@ -8,3 +8,4 @@ a = from_txt("./dfa/dfa2.txt")
 b = deterministicFiniteAutomaton(a)
 
 c = from_txt("./nfa/nfa1.txt")
+d = nondeterministicFiniteAutomaton(c)
