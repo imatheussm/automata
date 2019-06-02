@@ -7,7 +7,6 @@ class nondeterministicFiniteAutomaton(finiteAutomaton):
 
 		Parameters
 		----------
-
 		self : nondeterministicFiniteAutomaton
 			A nondeterministicFiniteAutomaton object.
 		properties : dict, str(dict)

@@ -7,7 +7,6 @@ class deterministicFiniteAutomaton(finiteAutomaton):
 
 		Parameters
 		----------
-
 		self : deterministicFiniteAutomaton
 			A deterministicFiniteAutomaton object.
 		properties : dict, str(dict)

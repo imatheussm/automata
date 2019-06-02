@@ -7,7 +7,6 @@ class nondeterministicFiniteAutomatonWithEMoves(finiteAutomaton):
 
 		Parameters
 		----------
-
 		self : nondeterministicFiniteAutomatonWithEMoves
 			A nondeterministicFiniteAutomatonWithEMoves object.
 		properties : dict, str(dict)
