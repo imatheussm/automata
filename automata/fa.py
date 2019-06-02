@@ -64,7 +64,27 @@ class finiteAutomaton:
 																self.properties["initial_state"],
 																", ".join(self.properties["final_states"]))
 
-	def process(self,word,current_states=None):
+	def process_symbol(self,current_state,symbol):
+		"""Processes from a state to another, considering the symbol to be consumed in the process.
+
+		Parameters
+		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses).
+		current_state : str
+			The current_state.
+		symbol : str
+			The symbol to be read.
+
+		Returns
+		-------
+		tuple: (str, str, ..., str) or NoneType
+			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
+		"""
+		try: return self.properties["transitions"][(current_state,symbol)]
+		except: return None
+
+	def process_word(self,word,current_states=None,verbose=False):
 		"""Checks if a word can be processed by the finiteAutomaton object.
 
 		Parameters
@@ -73,19 +93,33 @@ class finiteAutomaton:
 			An object of the class finiteAutomaton (or any of its subclasses).
 		word : str
 			The word to be processed.
+		current_states : tuple(str), str, NoneType (default = None)
+			The state to be processed.
 		"""
-		if current_states == None: current_states = self.properties["initial_state"]
-		print("[LINE 78] Current state: {}".format(current_states))
+		is_final = False
+
+		if current_states == None: current_states = (self.properties["initial_state"],)
+		if verbose==True: print("[LINE 102] Current state (s): {}".format(current_states))
 		if word[0] not in self.properties["symbols"]: raise ValueError("The word provided contains symbols which are not in this automaton's alphabet.")
-		try:
-			print("[LINE 81] Attempting to process ({},{})".format(current_states,word[0]))
-			current_states = self.properties["transitions"][(current_states,word[0])]
-		except: return False
-		if len(word)>1:
-			results = [self.process(word[1:],current_states=current_state) for current_state in current_states]
-			if True in results: return True
-			else: return False
+		new_current_states = []
+		for current_state in current_states:
+			if verbose==True: print("[LINE 106] Attempting to process ({},{})".format(current_state,word[0]))
+			new_current_states += list(self.process_symbol(current_state,word[0]))
+		current_states = tuple(filter(lambda x: x is not None,new_current_states))
+		del(new_current_states)
+		if len(word) > 1:
+			if verbose==True: print("[LINE 111] Remaining symbols to be processed: {}\n".format(word))
+			return self.process_word(word[1:],current_states=current_states,verbose=verbose)
 		else:
-			for current_state in current_states:
-				if current_state in self.properties["final_states"]: return True
-			return False
+			if verbose==True: print("[LINE 114] Final states found: {}".format(current_states))
+			for state in current_states:
+				if state in self.properties["final_states"]:
+					if verbose==True: print("[LINE 117] The state {} is final.".format(state))
+					is_final = True
+				else:
+					if verbose==True: print("[LINE 119] The state {} is not final.".format(state))
+			if is_final == True:
+				if verbose==True: print("[LINE 120] The word has been accepted. The function returns ",end="")
+			else:
+				if verbose==True: print("[LINE 121] The word has not been accepted. The function returns ",end="")
+			return is_final
