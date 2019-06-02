@@ -1,3 +1,5 @@
+from itertools import product
+
 class finiteAutomaton:
 	"""A generic Finite Automaton class to be inherited by the DFA, NFA and NFAE subclasses."""
 	def __eq__(self,other):
@@ -147,5 +149,19 @@ class finiteAutomaton:
 				column_titles.append("ε")
 				break
 		print("|".join(["{1:^{0}}".format(space,element) for element in column_titles]))
-		#for (origins, destinations) in self.properties["transitions"].items():	   #   ERRADO ERRADO   #
-		#	print("|".join(["{1:^{0}}".format(space,element) for element in (origins + destinations)]))#
+		i, line= 1, []
+		for (state, symbol) in list(product(self.properties["states"],column_titles[1:])):
+			#print("[LINE 154] ({}, {})".format(state,symbol))
+			if line == []: line = ["{1:^{0}}".format(space,state)]
+			if i<len(column_titles):
+				#print("[LINE 157] i = {} | line = {}".format(i,line))
+				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
+				except: line.append("{1:^{0}}".format(space,", ".join("-")))
+				i+=1
+			else:
+				#print("[LINE 161] Printing...")
+				print("|".join(["{1:^{0}}".format(space,element) for element in line]))
+				i,line = 2, ["{1:^{0}}".format(space,state)]
+				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
+				except: line.append("{1:^{0}}".format(space,", ".join("-")))
+		print("|".join(["{1:^{0}}".format(space,element) for element in line]))
