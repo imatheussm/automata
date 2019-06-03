@@ -146,7 +146,7 @@ class finiteAutomaton:
 		word : str
 			The word to be processed.
 		current_states : tuple(str), str, NoneType (default = None)
-			The state to be processed.
+			The state to be processed. It is actively used throughout the function, since it is recursive.
 		verbose : bool
 			Serves to tell the function if print statements should be displayed as the word is processed.
 
@@ -162,29 +162,30 @@ class finiteAutomaton:
 		if word[0] not in self.properties["symbols"]:
 			if verbose == True: print("\n[LINE 163] The symbol {} is not contained in this automaton's alphabet. As such, it cannot be processed.\n\
 [LINE 164] The function returns ".format(word[0]),
-										  end="")
+										 end="")
 			return False
 		new_current_states = []
 		for current_state in current_states:
 			if (current_state, "ε") in self.properties["transitions"].keys():
 				if verbose == True:
 					print("[LINE 171] This state has the empty transition. All possibilities shall be tested.")
-					print("[LINE 172] Attempting to execute δ({}, ε{})".format(current_state,word[0]))
+					print("[LINE 172] Executing δ({{{}}}, ε) and δ({}, {})".format(current_state,"{" + str(self.process_symbol(current_state,"ε"))[1:-1].strip(",").strip("'") + "}",word[0]))
 				try: new_current_states += list(self.process_symbol(self.process_symbol(current_state,"ε"),word[0]))
 				except: pass
-				if verbose == True: print("[LINE 175] Attempting to execute δ({}, {}ε)".format(current_state,word[0]))
+				if verbose == True:
+					print("[LINE 175] Executing δ({{{}}}, {}) and δ({}, ε)".format(current_state,word[0],"{" + str(self.process_symbol(current_state,word[0]))[1:-1].strip(",").strip("'") + "}"))
 				try: new_current_states += list(self.process_symbol(self.process_symbol(current_state,word[0]),"ε"))
 				except: pass
-			if verbose == True: print("[LINE 178] Attempting to execute δ({}, {})".format(current_state,word[0]))
+			if verbose == True: print("[LINE 178] Executing δ({{{}}}, {})\n".format(current_state,word[0]))
 			try: new_current_states += list(self.process_symbol(current_state,word[0]))
 			except: pass
-		current_states = tuple(new_current_states)
+		current_states = tuple(sorted(set(new_current_states)))
 		del(new_current_states)
 		if len(word) > 1:
 			if verbose == True: print("[LINE 184] Remaining symbols to be processed: {}\n".format(word[1:]))
 			return self.process_word(word[1:],current_states=current_states,verbose=verbose)
 		else:
-			if verbose == True: print("\n\n[LINE 187] Final states found: {}\n".format(", ".join(current_states)))
+			if verbose == True: print("\n[LINE 187] Final states found: {}\n".format(", ".join(current_states)))
 			for state in current_states:
 				if state in self.properties["final_states"]:
 					if verbose == True: print("[LINE 190] {} is final.".format(state))
