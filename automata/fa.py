@@ -52,7 +52,7 @@ class finiteAutomaton:
 		----------
 		self : finiteAutomaton
 			An object of the class finiteAutomaton (or any of its subclasses).
-		extended : bool
+		alt_display : bool
 			Serves to tell the method if you want the extended version of the representation by default or not.
 
 		Returns
