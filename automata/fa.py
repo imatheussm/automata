@@ -169,11 +169,11 @@ class finiteAutomaton:
 			if (current_state, "ε") in self.properties["transitions"].keys():
 				if verbose == True:
 					print("[LINE 171] This state has the empty transition. All possibilities shall be tested.")
-					print("[LINE 172] Executing δ({{{}}}, ε) and δ({}, {})".format(current_state,"{" + str(self.process_symbol(current_state,"ε"))[1:-1].strip(",").strip("'") + "}",word[0]))
+					print("[LINE 172] Executing δ({{{}}}, ε) and δ({}, {})".format(current_state,"{" + "".join(str(self.process_symbol(current_state,"ε"))[1:-1].strip(",").split("'")) + "}",word[0]))
 				try: new_current_states += list(self.process_symbol(self.process_symbol(current_state,"ε"),word[0]))
 				except: pass
 				if verbose == True:
-					print("[LINE 175] Executing δ({{{}}}, {}) and δ({}, ε)".format(current_state,word[0],"{" + str(self.process_symbol(current_state,word[0]))[1:-1].strip(",").strip("'") + "}"))
+					print("[LINE 175] Executing δ({{{}}}, {}) and δ({}, ε)".format(current_state,word[0],"{" + "".join(str(self.process_symbol(current_state,word[0]))[1:-1].strip(",").split("'")) + "}"))
 				try: new_current_states += list(self.process_symbol(self.process_symbol(current_state,word[0]),"ε"))
 				except: pass
 			if verbose == True: print("[LINE 178] Executing δ({{{}}}, {})\n".format(current_state,word[0]))
