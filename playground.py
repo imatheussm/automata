@@ -13,5 +13,5 @@ d = nondeterministicFiniteAutomaton(c)
 e = from_txt("./nfae/nfae1.txt")
 f = nondeterministicFiniteAutomatonWithEMoves(e)
 
-# I NEED TO SOLVE THIS, IN ADDITION TO SHOWING THE TRANSITIONS
-f.process_word("abb",verbose=True)
+g = from_txt("./nfae/nfae2.txt")
+h = nondeterministicFiniteAutomatonWithEMoves(g)
