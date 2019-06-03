@@ -60,7 +60,7 @@ class finiteAutomaton:
 		str
 			The string representation of the object, which will be printed out.
 		"""
-		if alt_display==True: return "<{} object>\nAutomaton: ({{{}}}, {{{}}}, {}, {}, {{{}}})\n\nTransitions:\n{}".format(str(type(self)).split("'")[1],
+		if alt_display == True: return "<{} object>\nAutomaton: ({{{}}}, {{{}}}, {}, {}, {{{}}})\n\nTransitions:\n{}".format(str(type(self)).split("'")[1],
 																														   ", ".join(self.properties["symbols"]),
 																														   ", ".join(self.properties["states"]),
 																														   "δ",
@@ -136,30 +136,30 @@ class finiteAutomaton:
 		is_final = False
 
 		if current_states == None: current_states = (self.properties["initial_state"],)
-		if verbose==True: print("[LINE 102] Current state (s): {}".format(", ".join(current_states)))
+		if verbose == True: print("[LINE 102] Current state (s): {}".format(", ".join(current_states)))
 		if word[0] not in self.properties["symbols"]: raise ValueError("The word provided contains symbols which are not in this automaton's alphabet.")
 		new_current_states = []
 		for current_state in current_states:
-			if verbose==True: print("[LINE 106] Attempting to execute δ({}, {})".format(current_state,word[0]))
+			if verbose == True: print("[LINE 106] Attempting to execute δ({}, {})".format(current_state,word[0]))
 			try: new_current_states += list(self.process_symbol(current_state,word[0]))
 			except: pass
 		current_states = tuple(new_current_states)
 		del(new_current_states)
 		if len(word) > 1:
-			if verbose==True: print("[LINE 111] Remaining symbols to be processed: {}\n".format(word[1:]))
+			if verbose == True: print("[LINE 111] Remaining symbols to be processed: {}\n".format(word[1:]))
 			return self.process_word(word[1:],current_states=current_states,verbose=verbose)
 		else:
-			if verbose==True: print("\n\n[LINE 114] Final states found: {}\n".format(", ".join(current_states)))
+			if verbose == True: print("\n\n[LINE 114] Final states found: {}\n".format(", ".join(current_states)))
 			for state in current_states:
 				if state in self.properties["final_states"]:
-					if verbose==True: print("[LINE 117] {} is final.".format(state))
+					if verbose == True: print("[LINE 117] {} is final.".format(state))
 					is_final = True
 				else:
-					if verbose==True: print("[LINE 119] {} is not final.".format(state))
+					if verbose == True: print("[LINE 119] {} is not final.".format(state))
 			if is_final == True:
-				if verbose==True: print("\n[LINE 120] The word has been accepted. The function returns ",end="")
+				if verbose == True: print("\n[LINE 120] The word has been accepted. The function returns ",end="")
 			else:
-				if verbose==True: print("\n[LINE 121] The word has not been accepted. The function returns ",end="")
+				if verbose == True: print("\n[LINE 121] The word has not been accepted. The function returns ",end="")
 			return is_final
 
 	def transitions(self,to_str=False):
@@ -174,17 +174,17 @@ class finiteAutomaton:
 		"""
 		string = []
 		column_titles, space = ["δ"] + list(self.properties["symbols"]), max([len(item) for item in self.properties["transitions"].values()]) * 4 + 3
-		column_titles[0] = int((space)/2)*" " + column_titles[0] + int((space)/2)*" "
+		column_titles[0] = int((space) / 2) * " " + column_titles[0] + int((space) / 2) * " "
 		for (origins, destinations) in self.properties["transitions"].items():
 			if "ε" in origins:
 				column_titles.append("ε")
 				break
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles])))
-		i, line= 1, []
+		i, line = 1, []
 		for (state, symbol) in list(product(self.properties["states"],column_titles[1:])):
 			#print("[LINE 154] ({}, {})".format(state,symbol))
 			if line == []: line = ["{1:^{0}}".format(space,state)]
-			if i<len(column_titles):
+			if i < len(column_titles):
 				#print("[LINE 157] i = {} | line = {}".format(i,line))
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
 				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
@@ -196,5 +196,5 @@ class finiteAutomaton:
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
 				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
-		if to_str==True: return "\n".join(string)
+		if to_str == True: return "\n".join(string)
 		else: print("\n".join(string))
