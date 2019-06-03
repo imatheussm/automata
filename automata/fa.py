@@ -102,7 +102,7 @@ class finiteAutomaton:
 		str, void
 			Returns a string if to_str == True; otherwise, it just prints it and doesn't return anything.
 		"""
-		if transitions==True: string = "({{{}}}, {{{}}}, {}, {}, {{{}}})".format(", ".join(self.properties["symbols"]),
+		if transitions == True: string = "({{{}}}, {{{}}}, {}, {}, {{{}}})".format(", ".join(self.properties["symbols"]),
 																				 ", ".join(self.properties["states"]),
 																				 str(self.properties["transitions"]),
 																				 self.properties["initial_state"],
@@ -112,7 +112,7 @@ class finiteAutomaton:
 																 "δ",
 																 self.properties["initial_state"],
 																 ", ".join(self.properties["final_states"]))
-		if to_str==True: return string
+		if to_str == True: return string
 		else: print(string)
 
 	def process_symbol(self,current_state,symbol):
@@ -210,7 +210,7 @@ class finiteAutomaton:
 		i, line = 1, []
 		for (state, symbol) in list(product(self.properties["states"],column_titles[1:])):
 			#print("[LINE 154] ({}, {})".format(state,symbol))
-			if line == []: line = ["{0}{2:^{1}}".format(body_left_margin*" ",space,state)]
+			if line == []: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 			if i < len(column_titles):
 				#print("[LINE 157] i = {} | line = {}".format(i,line))
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
@@ -219,7 +219,7 @@ class finiteAutomaton:
 			else:
 				#print("[LINE 161] Printing...")
 				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
-				i,line = 2, ["{0}{2:^{1}}".format(body_left_margin*" ",space,state)]
+				i,line = 2, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
 				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
