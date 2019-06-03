@@ -132,6 +132,7 @@ class finiteAutomaton:
 		tuple: (str, str, ..., str) or NoneType
 			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
 		"""
+		if isinstance(current_state,tuple) and len(current_state) == 1: current_state = current_state[0]
 		try: return self.properties["transitions"][(current_state,symbol)]
 		except: return None
 
@@ -158,29 +159,42 @@ class finiteAutomaton:
 
 		if current_states == None: current_states = (self.properties["initial_state"],)
 		if verbose == True: print("[LINE 102] Current state (s): {}".format(", ".join(current_states)))
-		if word[0] not in self.properties["symbols"]: raise ValueError("The word provided contains symbols which are not in this automaton's alphabet.")
+		if word[0] not in self.properties["symbols"]:
+			if verbose == True: print("\n[LINE 163] The symbol {} is not contained in this automaton's alphabet. As such, it cannot be processed.\n\
+[LINE 164] The function returns ".format(word[0]),
+										  end="")
+			return False
 		new_current_states = []
 		for current_state in current_states:
-			if verbose == True: print("[LINE 106] Attempting to execute δ({}, {})".format(current_state,word[0]))
+			if (current_state, "ε") in self.properties["transitions"].keys():
+				if verbose == True:
+					print("[LINE 171] This state has the empty transition. All possibilities shall be tested.")
+					print("[LINE 172] Attempting to execute δ({}, ε{})".format(current_state,word[0]))
+				try: new_current_states += list(self.process_symbol(self.process_symbol(current_state,"ε"),word[0]))
+				except: pass
+				if verbose == True: print("[LINE 175] Attempting to execute δ({}, {}ε)".format(current_state,word[0]))
+				try: new_current_states += list(self.process_symbol(self.process_symbol(current_state,word[0]),"ε"))
+				except: pass
+			if verbose == True: print("[LINE 178] Attempting to execute δ({}, {})".format(current_state,word[0]))
 			try: new_current_states += list(self.process_symbol(current_state,word[0]))
 			except: pass
 		current_states = tuple(new_current_states)
 		del(new_current_states)
 		if len(word) > 1:
-			if verbose == True: print("[LINE 111] Remaining symbols to be processed: {}\n".format(word[1:]))
+			if verbose == True: print("[LINE 184] Remaining symbols to be processed: {}\n".format(word[1:]))
 			return self.process_word(word[1:],current_states=current_states,verbose=verbose)
 		else:
-			if verbose == True: print("\n\n[LINE 114] Final states found: {}\n".format(", ".join(current_states)))
+			if verbose == True: print("\n\n[LINE 187] Final states found: {}\n".format(", ".join(current_states)))
 			for state in current_states:
 				if state in self.properties["final_states"]:
-					if verbose == True: print("[LINE 117] {} is final.".format(state))
+					if verbose == True: print("[LINE 190] {} is final.".format(state))
 					is_final = True
 				else:
-					if verbose == True: print("[LINE 119] {} is not final.".format(state))
+					if verbose == True: print("[LINE 193] {} is not final.".format(state))
 			if is_final == True:
-				if verbose == True: print("\n[LINE 120] The word has been accepted. The function returns ",end="")
+				if verbose == True: print("\n[LINE 195] The word has been accepted. The function returns ",end="")
 			else:
-				if verbose == True: print("\n[LINE 121] The word has not been accepted. The function returns ",end="")
+				if verbose == True: print("\n[LINE 197] The word has not been accepted. The function returns ",end="")
 			return is_final
 
 	def transitions(self,to_str=False,body_left_margin=0):
