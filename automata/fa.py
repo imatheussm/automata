@@ -60,14 +60,13 @@ class finiteAutomaton:
 		str
 			The string representation of the object, which will be printed out.
 		"""
-		if alt_display==True:
-			return "<{} object>\nAutomaton: ({{{}}}, {{{}}}, {}, {}, {{{}}})\n\nTransitions:\n{}".format(str(type(self)).split("'")[1],
-																										 ", ".join(self.properties["symbols"]),
-																										 ", ".join(self.properties["states"]),
-																										 "δ",
-																										 self.properties["initial_state"],
-																										 ", ".join(self.properties["final_states"]),
-																										 self.transitions(True))
+		if alt_display==True: return "<{} object>\nAutomaton: ({{{}}}, {{{}}}, {}, {}, {{{}}})\n\nTransitions:\n{}".format(str(type(self)).split("'")[1],
+																														   ", ".join(self.properties["symbols"]),
+																														   ", ".join(self.properties["states"]),
+																														   "δ",
+																														   self.properties["initial_state"],
+																														   ", ".join(self.properties["final_states"]),
+																														   self.transitions(True))
 		return "<{} object>\n      Symbols: {}\n       States: {}\n\
   Transitions: {}\nInitial State: {}\n Final States: {}".format(str(type(self)).split("'")[1],
 																", ".join(self.properties["symbols"]),
@@ -75,6 +74,25 @@ class finiteAutomaton:
 																str(self.properties["transitions"]),
 																self.properties["initial_state"],
 																", ".join(self.properties["final_states"]))
+
+	def __str__(self):
+		"""String representation of the automaton.
+
+		Parameters
+		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses).
+
+		Returns
+		-------
+		str
+			The string representation of the automaton.
+		"""
+		return "({{{}}}, {{{}}}, {}, {}, {{{}}})".format(", ".join(self.properties["symbols"]),
+														 ", ".join(self.properties["states"]),
+														 str(self.properties["transitions"]),
+														 self.properties["initial_state"],
+														 ", ".join(self.properties["final_states"]))
 
 	def process_symbol(self,current_state,symbol):
 		"""Processes from a state to another, considering the symbol to be consumed in the process.
@@ -169,14 +187,14 @@ class finiteAutomaton:
 			if i<len(column_titles):
 				#print("[LINE 157] i = {} | line = {}".format(i,line))
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
-				except: line.append("{1:^{0}}".format(space,", ".join("-")))
+				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
 				i+=1
 			else:
 				#print("[LINE 161] Printing...")
 				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 				i,line = 2, ["{1:^{0}}".format(space,state)]
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
-				except: line.append("{1:^{0}}".format(space,", ".join("-")))
+				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 		if to_str==True: return "\n".join(string)
 		else: print("\n".join(string))
