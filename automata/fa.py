@@ -209,15 +209,12 @@ class finiteAutomaton:
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles])))
 		i, line = 1, []
 		for (state, symbol) in list(product(self.properties["states"],column_titles[1:])):
-			#print("[LINE 154] ({}, {})".format(state,symbol))
 			if line == []: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 			if i < len(column_titles):
-				#print("[LINE 157] i = {} | line = {}".format(i,line))
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
 				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
 				i+=1
 			else:
-				#print("[LINE 161] Printing...")
 				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 				i,line = 2, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
