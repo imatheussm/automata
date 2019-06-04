@@ -62,7 +62,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		-------
 
 		"""
-		return process_symbols(*args, **kwargs)
+		return self.process_symbols(current_state,symbol,stack_symbol)
 
 	def process_symbols(self,current_state,symbol,stack_symbol):
 		"""Processes from a state to another, considering the symbol to be consumed in the process.
@@ -110,19 +110,29 @@ class finitePushdownAutomaton(finiteAutomaton):
 			if "ε" in origins:
 				column_titles.append("ε")
 				break
-		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles])))
-		i, line = 1, []
+		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles + ["Γ"]])))
+		i, line, previous_state = 1, [], None
 		for (state, symbol, stack_symbol) in list(product(self.properties["states"],column_titles[1:],self.properties["stack_symbols"])):
-			if line == []: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
+			print("[LINE 116] stack_symbol: {}".format(stack_symbol))
+			if line == []:
+				if state != previous_state:
+					previous_state = state
+					line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
+				else: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space," ")]
 			if i < len(column_titles):
 				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbols(state,symbol,stack_symbol))) + "}"))
-				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
+				except: line.append("{1:^{0}}".format(space,"ε"))
 				i+=1
 			else:
+				line.append("{1:^{0}}".format(space,stack_symbol))
 				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
-				i,line = 2, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
+				i = 2
+				if state != previous_state:
+					previous_state = state
+					line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
+				else: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space," ")]
 				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbols(state,symbol,stack_symbol))) + "}"))
-				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
+				except: line.append("{1:^{0}}".format(space,"ε"))
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 		if to_str == True: return "\n".join(string)
 		else: print("\n".join(string))
