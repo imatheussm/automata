@@ -104,17 +104,11 @@ class finiteAutomaton:
 		"""
 		if transitions == True: transitions = self.properties["transitions"]
 		else: transitions = "δ"
-		if "stack_symbols" not in self.properties.keys(): string = "({{{}}}, {{{}}}, {}, {}, {{{}}})".format(", ".join(self.properties["symbols"]),
-																										 ", ".join(self.properties["states"]),
-																										 str(transitions),
-																										 self.properties["initial_state"],
-																										 ", ".join(self.properties["final_states"]))
-		else: string = "({{{}}}, {{{}}}, {}, {}, {{{}}}, {{{}}})".format(", ".join(self.properties["symbols"]),
-																 ", ".join(self.properties["states"]),
-																 str(transitions),
-																 self.properties["initial_state"],
-																 ", ".join(self.properties["final_states"]),
-																 ", ".join(self.properties["stack_symbols"]))
+		string = "({{{}}}, {{{}}}, {}, {}, {{{}}})".format(", ".join(self.properties["symbols"]),
+																					 ", ".join(self.properties["states"]),
+																					 str(transitions),
+																					 self.properties["initial_state"],
+																					 ", ".join(self.properties["final_states"]))
 		if to_str == True: return string
 		else: print(string)
 
