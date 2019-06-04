@@ -26,5 +26,5 @@ class nondeterministicFiniteAutomatonWithEMoves(finiteAutomaton):
 		empty_moves = False
 		for (origins, destinations) in self.properties["transitions"].items():
 			if "ε" in origins: empty_moves = True
-		if empty_moves == False: raise TypeError("This automaton does not have ε-moves.")
+		if empty_moves == False: raise TypeError("The automaton provided does not have ε-moves.")
 		else: del(empty_moves)

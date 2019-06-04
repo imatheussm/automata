@@ -26,6 +26,6 @@ class nondeterministicFiniteAutomaton(finiteAutomaton):
 		is_nondeterministic = False
 		for (origins, destinations) in self.properties["transitions"].items():
 			if len(destinations) > 1: is_nondeterministic = True
-			if "ε" in origins: raise TypeError("This automaton has ε-moves.")
-		if not is_nondeterministic: raise TypeError("This automaton is deterministic.")
+			if "ε" in origins: raise TypeError("The automaton provided has ε-moves.")
+		if not is_nondeterministic: raise TypeError("The automaton provided is deterministic.")
 		else: del(is_nondeterministic)
