@@ -62,7 +62,7 @@ class finiteAutomaton:
 		"""
 		if alt_display == True: return "<{} object>\n  Automaton: {}\nTransitions: {}".format(str(type(self)).split("'")[1],
 																							   self.automaton(False,True),
-																							   self.transitions(True,13))
+																							   self.transitions(True,14))
 		return "<{} object>\n      Symbols: {}\n       States: {}\n\
   Transitions: {}\nInitial State: {}\n Final States: {}".format(str(type(self)).split("'")[1],
 																", ".join(self.properties["symbols"]),
@@ -215,7 +215,7 @@ class finiteAutomaton:
 			Returns a string if to_str == True; otherwise, it just prints it and doesn't return anything.
 		"""
 		string = []
-		column_titles, space = ["δ"] + list(self.properties["symbols"]), max([len(item) for item in self.properties["transitions"].values()]) * 4 + 1
+		column_titles, space = ["δ"] + list(self.properties["symbols"]), max([len(item) for item in self.properties["transitions"].values()]) * 4 + 2
 		column_titles[0] = int((space) / 2) * " " + column_titles[0] + int((space) / 2) * " "
 		for (origins, destinations) in self.properties["transitions"].items():
 			if "ε" in origins:
@@ -226,13 +226,13 @@ class finiteAutomaton:
 		for (state, symbol) in list(product(self.properties["states"],column_titles[1:])):
 			if line == []: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 			if i < len(column_titles):
-				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
+				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbol(state,symbol))) + "}"))
 				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
 				i+=1
 			else:
 				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 				i,line = 2, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
-				try: line.append("{1:^{0}}".format(space,", ".join(list(self.process_symbol(state,symbol)))))
+				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbol(state,symbol))) + "}"))
 				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 		if to_str == True: return "\n".join(string)
