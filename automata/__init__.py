@@ -1,6 +1,7 @@
 from automata.dfa import *
 from automata.nfa import *
 from automata.nfae import *
+from automata.dfpa import *
 
 def from_txt(automaton,verbose=False):
 	"""Converts a .txt file containing the automaton's properties into a finiteAutomaton (sub)class.
