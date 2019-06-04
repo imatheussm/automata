@@ -4,7 +4,7 @@ sys_path.append(getcwd())
 from automata import *
 
 #a = finiteAutomaton("./dfa/sample.txt")
-a = from_txt("./dfa/dfa2.txt")
+a = from_txt("./dfa/dfa2.txt",verbose=True)
 b = deterministicFiniteAutomaton(a)
 
 c = from_txt("./nfa/nfa1.txt")
@@ -15,3 +15,5 @@ f = nondeterministicFiniteAutomatonWithEMoves(e)
 
 g = from_txt("./nfae/nfae2.txt")
 h = nondeterministicFiniteAutomatonWithEMoves(g)
+
+i = from_txt("./dfpa/dfpa1.txt",verbose=True)
