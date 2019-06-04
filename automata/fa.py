@@ -224,13 +224,13 @@ class finiteAutomaton:
 			if line == []: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 			if i < len(column_titles):
 				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbol(state,symbol))) + "}"))
-				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
+				except: line.append("{1:^{0}}".format(space,"ε"))
 				i+=1
 			else:
 				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 				i,line = 2, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbol(state,symbol))) + "}"))
-				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
+				except: line.append("{1:^{0}}".format(space,"ε"))
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 		if to_str == True: return "\n".join(string)
 		else: print("\n".join(string))
