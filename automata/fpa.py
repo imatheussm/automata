@@ -51,3 +51,78 @@ class finitePushdownAutomaton(finiteAutomaton):
 																   ", ".join(self.properties["stack_symbols"]))
 		if to_str == True: return string
 		else: print(string)
+
+	def process_symbol(self,current_state,symbol,stack_symbol):
+		"""Redirection to finitePushdownAutomaton.process_symbols() meant to overwrite the superclass' implementation.
+
+		Parameters
+		----------
+
+		Returns
+		-------
+
+		"""
+		return process_symbols(*args, **kwargs)
+
+	def process_symbols(self,current_state,symbol,stack_symbol):
+		"""Processes from a state to another, considering the symbol to be consumed in the process.
+
+		Parameters
+		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses).
+		current_state : str
+			The current_state.
+		symbol : str
+			The symbol to be read.
+		stack_symbol : str
+			The symbol to be read from the stack.
+
+		Returns
+		-------
+		tuple: (str, str, ..., str) or NoneType
+			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
+		"""
+		#if isinstance(current_state,tuple) and len(current_state) == 1: current_state = current_state[0]
+		try: return self.properties["transitions"][(current_state,symbol,stack_symbol)]
+		except: return None
+
+	def transitions(self,to_str=False,body_left_margin=0):
+		"""Prints the transitions in a transition table format.
+
+		Parameters
+		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses).
+		to_str : bool (default = False)
+			This serves to tell the method if you want a string object to be returned instead of just printing the transitions.
+		body_left_margin : int (default = 0)
+			This parameter, if changed, will define the spacing of the second line onwards (body). It is used with .__repr__() to better display the automaton.
+		Returns
+		-------
+		str, void
+			Returns a string if to_str == True; otherwise, it just prints it and doesn't return anything.
+		"""
+		string = []
+		column_titles, space = ["δ"] + list(self.properties["symbols"]), max([len(item) for item in self.properties["transitions"].values()]) * 4 + 2
+		column_titles[0] = int((space) / 2) * " " + column_titles[0] + int((space) / 2) * " "
+		for (origins, destinations) in self.properties["transitions"].items():
+			if "ε" in origins:
+				column_titles.append("ε")
+				break
+		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles])))
+		i, line = 1, []
+		for (state, symbol, stack_symbol) in list(product(self.properties["states"],column_titles[1:],self.properties["stack_symbols"])):
+			if line == []: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
+			if i < len(column_titles):
+				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbols(state,symbol,stack_symbol))) + "}"))
+				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
+				i+=1
+			else:
+				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
+				i,line = 2, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
+				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbols(state,symbol,stack_symbol))) + "}"))
+				except: line.append("{1:^{0}}".format(space,", ".join("ε")))
+		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
+		if to_str == True: return "\n".join(string)
+		else: print("\n".join(string))
