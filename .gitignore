@@ -12,3 +12,4 @@ automata/__pycache__/nfae.cpython-37.pyc
 automata/__pycache__/nfa.cpython-37.pyc
 automata/__pycache__/fa.cpython-37.pyc
 automata/__pycache__/dfa.cpython-37.pyc
+automata/__pycache__/dfpa.cpython-37.pyc
