@@ -17,3 +17,4 @@ g = from_txt("./nfae/nfae2.txt")
 h = nondeterministicFiniteAutomatonWithEMoves(g)
 
 i = from_txt("./dfpa/dfpa1.txt",verbose=True)
+j = deterministicFinitePushdownAutomaton(i)
