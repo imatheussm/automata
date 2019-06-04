@@ -24,7 +24,7 @@ def from_txt(automaton,verbose=False):
 		An automaton object of one of the aforementioned (sub)classes, depending on the properties stipulated.
 	"""
 
-	order = ["symbols", "states", "transitions", "initial_state", "final_states"]
+	order = ["symbols", "states", "transitions", "initial_state", "final_states", "stack_symbols"]
 	properties = {item: "" for item in order}
 
 	with open(automaton,"r",encoding="utf-8") as file:
