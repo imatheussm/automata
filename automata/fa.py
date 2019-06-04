@@ -102,16 +102,19 @@ class finiteAutomaton:
 		str, void
 			Returns a string if to_str == True; otherwise, it just prints it and doesn't return anything.
 		"""
-		if transitions == True: string = "({{{}}}, {{{}}}, {}, {}, {{{}}})".format(", ".join(self.properties["symbols"]),
-																				 ", ".join(self.properties["states"]),
-																				 str(self.properties["transitions"]),
-																				 self.properties["initial_state"],
-																				 ", ".join(self.properties["final_states"]))
-		else: string = "({{{}}}, {{{}}}, {}, {}, {{{}}})".format(", ".join(self.properties["symbols"]),
+		if transitions == True: transitions = self.properties["transitions"]
+		else: transitions = "δ"
+		if "stack_symbols" not in self.properties.keys(): string = "({{{}}}, {{{}}}, {}, {}, {{{}}})".format(", ".join(self.properties["symbols"]),
+																										 ", ".join(self.properties["states"]),
+																										 str(transitions),
+																										 self.properties["initial_state"],
+																										 ", ".join(self.properties["final_states"]))
+		else: string = "({{{}}}, {{{}}}, {}, {}, {{{}}}, {{{}}})".format(", ".join(self.properties["symbols"]),
 																 ", ".join(self.properties["states"]),
-																 "δ",
+																 str(transitions),
 																 self.properties["initial_state"],
-																 ", ".join(self.properties["final_states"]))
+																 ", ".join(self.properties["final_states"]),
+																 ", ".join(self.properties["stack_symbols"]))
 		if to_str == True: return string
 		else: print(string)
 
