@@ -64,18 +64,28 @@ def from_txt(automaton,verbose=False):
 
 		# Separating the lists contained inside the tuple
 		for item in order:
-			if properties[item][0] == "{" and properties[item][-1] == "}": properties[item] = tuple(properties[item][1:-1].split(", "))
+			if item=="stack_symbols" and properties["stack_symbols"]=="": continue
+			elif properties[item][0] == "{" and properties[item][-1] == "}": properties[item] = tuple(properties[item][1:-1].split(", "))
 
 		if verbose == True: print("[LINE 69] {}".format(properties))
 
 		# Processing the transitions
 		transitions = {}
 		transition_strings = [item.strip("\n").split(", ") for item in file.readlines()]
-		for item in transition_strings:
-			if (item[0],item[1]) not in transitions.keys(): transitions[(item[0],item[1])] = []
-			transitions[(item[0],item[1])] += [i.strip("{").strip("}") for i in item[2:]]
-		if verbose == True: print("[LINE 77] {}".format(transitions))
-		for transition in transitions.keys(): transitions[transition] = tuple(transitions[transition])
+
+		if properties["stack_symbols"]=="":
+			del(properties["stack_symbols"])
+			for item in transition_strings:
+				if (item[0],item[1]) not in transitions.keys(): transitions[(item[0],item[1])] = []
+				transitions[(item[0],item[1])] += [i.strip("{").strip("}") for i in item[2:]]
+			if verbose == True: print("[LINE 80] {}".format(transitions))
+			for transition in transitions.keys(): transitions[transition] = tuple(transitions[transition])
+		else:
+			for item in transition_strings:
+				if (item[0],item[1],item[2]) not in transitions.keys(): transitions[(item[0],item[1],item[2])] = []
+				transitions[(item[0],item[1],item[2])] += tuple(item[3:])
+			if verbose == True: print("[LINE 86] {}".format(transitions))
+			for transition in transitions.keys(): transitions[transition] = tuple(transitions[transition])
 
 		properties["transitions"] = transitions
 
