@@ -4,6 +4,7 @@ sys_path.append(getcwd())
 from automata import *
 
 #a = finiteAutomaton("./dfa/sample.txt")
+
 a = from_txt("./dfa/dfa2.txt")
 b = deterministicFiniteAutomaton(a)
 
@@ -16,11 +17,14 @@ f = nondeterministicFiniteAutomatonWithEMoves(e)
 g = from_txt("./nfae/nfae2.txt")
 h = nondeterministicFiniteAutomatonWithEMoves(g)
 
-i = from_txt("./dfpa/dfpa1.txt")
+i = from_txt("./fpa/fpa1.txt")
 j = deterministicFinitePushdownAutomaton(i)
 
-k = from_txt("./dfpa/dfpa2.txt")
+k = from_txt("./fpa/fpa2.txt")
 l = deterministicFinitePushdownAutomaton(k)
+
+m = from_txt("./dfa/dfa1.txt")
+n = deterministicFiniteAutomaton(m)
 
 #from itertools import product
 #k_ = list(product(j.properties["states"],j.properties["stack_symbols"],j.properties["symbols"]))
