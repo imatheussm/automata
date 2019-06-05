@@ -97,7 +97,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		try: return self.properties["transitions"][(current_state,symbol,stack_symbol)]
 		except: return None
 
-	def process_word(self,word,current_states=None, current_stack=None, verbose=False):
+	def process_word(self,word,verbose=False,current_states=None,current_stack=None):
 		"""Checks if a word can be processed by the finiteAutomaton object.
 
 		Parameters
@@ -106,12 +106,12 @@ class finitePushdownAutomaton(finiteAutomaton):
 			An object of the class finiteAutomaton (or any of its subclasses).
 		word : str
 			The word to be processed.
+		verbose : bool
+			Serves to tell the function if print statements should be displayed as the word is processed.
 		current_states : tuple(str), str, NoneType (default = None)
 			The states remaining to be processed. It is actively used throughout the function, since it is recursive.
 		current_stack : str
 			The content of the stack. It is actively used throughout the function, since it is recursive.
-		verbose : bool
-			Serves to tell the function if print statements should be displayed as the word is processed.
 
 		Returns
 		-------
@@ -122,56 +122,12 @@ class finitePushdownAutomaton(finiteAutomaton):
 		-----
 		- Contemplate the empty stack-reads along with the empty word-reads
 			This will be tricky, since there is four possibilities (len((symbol, empty))*len((empty, symbol))). To do this, I have to verify the existance of ε-moves word- and stack-related. More complexity!
-		- Reorder the parameters
-			It would be better if 'verbose' was the first of the parameters. I need to do this to fa.process_word() as well.
 		- Implement more verbose prints (stack status as well!)
 			I would do this anyway, since it will be far less painful to debug as I develop this function. Among these stack prints, I will have to print the stack as well, which is another element worth verifying. For the sake of convenience, it must have a pointer to the top of the stack, to avoid misinterpreting conventions by both my and my professor's part.
 		- Proceed with the goddamn proof-testing
 			This will be the most delightful (or dreadful and painful) phase: see the returned movements and check manually if they are correct. And I have to do this to every single one of the remaining automaton types.
 		"""
-		is_final = False
-
-		if current_states == None: current_states = (self.properties["initial_state"],)
-		if current_stack == None: current_stack = "" # Implemented. Time to use it!
-		if verbose == True: print("[LINE 102] Current state (s): {}".format(", ".join(current_states)))
-		if word[0] not in self.properties["symbols"]:
-			if verbose == True: print("\n[LINE 163] The symbol {} is not contained in this automaton's alphabet. As such, it cannot be processed.\n\
-[LINE 164] The function returns ".format(word[0]),
-										 end="")
-			return False
-		new_current_states = []
-		for current_state in current_states:
-			if (current_state, "ε") in [key[:-1] for key in self.properties["transitions"].keys()]:
-				if verbose == True:
-					print("[LINE 171] This state has the empty transition. All possibilities shall be tested.")
-					print("[LINE 172] Executing δ({{{}}}, ε) and δ({}, {})".format(current_state,"{" + "".join(str(self.process_symbol(current_state,"ε"))[1:-1].strip(",").split("'")) + "}",word[0]))
-				try: new_current_states += list(self.process_symbol(self.process_symbol(current_state,"ε"),word[0]))
-				except: pass
-				if verbose == True:
-					print("[LINE 175] Executing δ({{{}}}, {}) and δ({}, ε)".format(current_state,word[0],"{" + "".join(str(self.process_symbol(current_state,word[0]))[1:-1].strip(",").split("'")) + "}"))
-				try: new_current_states += list(self.process_symbol(self.process_symbol(current_state,word[0]),"ε"))
-				except: pass
-			if verbose == True: print("[LINE 178] Executing δ({{{}}}, {})\n".format(current_state,word[0]))
-			try: new_current_states += list(self.process_symbol(current_state,word[0]))
-			except: pass
-		current_states = tuple(sorted(set(new_current_states)))
-		del(new_current_states)
-		if len(word) > 1:
-			if verbose == True: print("[LINE 184] Remaining symbols to be processed: {}\n".format(word[1:]))
-			return self.process_word(word[1:],current_states=current_states,verbose=verbose)
-		else:
-			if verbose == True: print("\n[LINE 187] Final states found: {}\n".format(", ".join(current_states)))
-			for state in current_states:
-				if state in self.properties["final_states"]:
-					if verbose == True: print("[LINE 190] {} is final.".format(state))
-					is_final = True
-				else:
-					if verbose == True: print("[LINE 193] {} is not final.".format(state))
-			if is_final == True:
-				if verbose == True: print("\n[LINE 195] The word has been accepted. The function returns ",end="")
-			else:
-				if verbose == True: print("\n[LINE 197] The word has not been accepted. The function returns ",end="")
-			return is_final
+		raise NotImplementedError("I'm not in the right mindset to do this, lol.")
 
 	def transitions(self,to_str=False,body_left_margin=0):
 		"""Prints the transitions in a transition table format.
