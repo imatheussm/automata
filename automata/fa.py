@@ -142,7 +142,7 @@ class finiteAutomaton:
 			An object of the class finiteAutomaton (or any of its subclasses).
 		word : str
 			The word to be processed.
-		verbose : bool
+		verbose : bool (default = False)
 			Serves to tell the function if print statements should be displayed as the word is processed.
 		current_states : tuple(str), str, NoneType (default = None)
 			The state to be processed. It is actively used throughout the function, since it is recursive.
