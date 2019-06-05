@@ -19,5 +19,8 @@ h = nondeterministicFiniteAutomatonWithEMoves(g)
 i = from_txt("./dfpa/dfpa1.txt")
 j = deterministicFinitePushdownAutomaton(i)
 
-from itertools import product
-k = list(product(j.properties["states"],j.properties["stack_symbols"],j.properties["symbols"]))
+k = from_txt("./dfpa/dfpa2.txt")
+l = deterministicFinitePushdownAutomaton(k)
+
+#from itertools import product
+#k_ = list(product(j.properties["states"],j.properties["stack_symbols"],j.properties["symbols"]))
