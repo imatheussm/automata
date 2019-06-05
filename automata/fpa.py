@@ -149,7 +149,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		column_titles, stack_symbols, space = ["δ"] + list(self.properties["symbols"]) + ["?"], list(self.properties["stack_symbols"]) + ["?"], max([len(item) for item in self.properties["transitions"].values()]) * 4 + 2
 		column_titles[0] = int((space) / 2) * " " + column_titles[0] + int((space) / 2) * " "
 		for (origins, destinations) in self.properties["transitions"].items():
-			print(origins)
+			#print(origins)
 			if "ε" in origins[:-1]: column_titles.append("ε")
 			elif "ε" in origins[-1]: stack_symbols.append("ε")
 
