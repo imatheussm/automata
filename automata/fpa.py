@@ -112,24 +112,21 @@ class finitePushdownAutomaton(finiteAutomaton):
 				break
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles + ["Γ"]])))
 		i, line, previous_state = 1, [], None
-		for (state, symbol, stack_symbol) in list(product(self.properties["states"],column_titles[1:],self.properties["stack_symbols"])):
-			print("[LINE 116] stack_symbol: {}".format(stack_symbol))
+		for (state, stack_symbol, symbol) in list(product(self.properties["states"],self.properties["stack_symbols"],column_titles[1:])):
 			if line == []:
-				if state != previous_state:
-					previous_state = state
-					line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
+				if state != previous_state: previous_state, line = state, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 				else: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space," ")]
+			#print("[LINE 116] ({}, {}, {})".format(state,symbol,stack_symbol))
 			if i < len(column_titles):
 				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbols(state,symbol,stack_symbol))) + "}"))
 				except: line.append("{1:^{0}}".format(space,"ε"))
+				if i == len(column_titles)-1: line.append("{1:^{0}}".format(space,stack_symbol))
 				i+=1
 			else:
-				line.append("{1:^{0}}".format(space,stack_symbol))
+				#print("[LINE 128] Final line: {}".format("|".join(["{1:^{0}}".format(space,element) for element in line])))
 				string.append(str("|".join(["{1:^{0}}".format(space,element) for element in line])))
 				i = 2
-				if state != previous_state:
-					previous_state = state
-					line = ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
+				if state != previous_state: previous_state, line = state, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 				else: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space," ")]
 				try: line.append("{1:^{0}}".format(space,"{" + ", ".join(list(self.process_symbols(state,symbol,stack_symbol))) + "}"))
 				except: line.append("{1:^{0}}".format(space,"ε"))
