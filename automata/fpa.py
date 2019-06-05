@@ -97,7 +97,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		try: return self.properties["transitions"][(current_state,symbol,stack_symbol)]
 		except: return None
 
-	def process_word(self,word,current_states=None,verbose=False):
+	def process_word(self,word,current_states=None, current_stack=None, verbose=False):
 		"""Checks if a word can be processed by the finiteAutomaton object.
 
 		Parameters
@@ -107,7 +107,9 @@ class finitePushdownAutomaton(finiteAutomaton):
 		word : str
 			The word to be processed.
 		current_states : tuple(str), str, NoneType (default = None)
-			The state to be processed. It is actively used throughout the function, since it is recursive.
+			The states remaining to be processed. It is actively used throughout the function, since it is recursive.
+		current_stack : str
+			The content of the stack. It is actively used throughout the function, since it is recursive.
 		verbose : bool
 			Serves to tell the function if print statements should be displayed as the word is processed.
 
@@ -115,10 +117,22 @@ class finitePushdownAutomaton(finiteAutomaton):
 		-------
 		bool
 			The result of the processing. In other words: if the word has been accepted by the automaton or not.
+
+		To-do
+		-----
+		- Contemplate the empty stack-reads along with the empty word-reads
+			This will be tricky, since there is four possibilities (len((symbol, empty))*len((empty, symbol))). To do this, I have to verify the existance of ε-moves word- and stack-related. More complexity!
+		- Reorder the parameters
+			It would be better if 'verbose' was the first of the parameters. I need to do this to fa.process_word() as well.
+		- Implement more verbose prints (stack status as well!)
+			I would do this anyway, since it will be far less painful to debug as I develop this function. Among these stack prints, I will have to print the stack as well, which is another element worth verifying. For the sake of convenience, it must have a pointer to the top of the stack, to avoid misinterpreting conventions by both my and my professor's part.
+		- Proceed with the goddamn proof-testing
+			This will be the most delightful (or dreadful and painful) phase: see the returned movements and check manually if they are correct. And I have to do this to every single one of the remaining automaton types.
 		"""
 		is_final = False
 
 		if current_states == None: current_states = (self.properties["initial_state"],)
+		if current_stack == None: current_stack = "" # Implemented. Time to use it!
 		if verbose == True: print("[LINE 102] Current state (s): {}".format(", ".join(current_states)))
 		if word[0] not in self.properties["symbols"]:
 			if verbose == True: print("\n[LINE 163] The symbol {} is not contained in this automaton's alphabet. As such, it cannot be processed.\n\
@@ -127,7 +141,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 			return False
 		new_current_states = []
 		for current_state in current_states:
-			if (current_state, "ε") in self.properties["transitions"].keys():
+			if (current_state, "ε") in [key[:-1] for key in self.properties["transitions"].keys()]:
 				if verbose == True:
 					print("[LINE 171] This state has the empty transition. All possibilities shall be tested.")
 					print("[LINE 172] Executing δ({{{}}}, ε) and δ({}, {})".format(current_state,"{" + "".join(str(self.process_symbol(current_state,"ε"))[1:-1].strip(",").split("'")) + "}",word[0]))
