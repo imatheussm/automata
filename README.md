@@ -19,4 +19,4 @@ Under this repository you are going to find the following automata:
 - [Deterministic Finite Automaton](./dfa);
 - [Nondeterministic Finite Automaton](./nfa);
 - [Nondeterministic Finite Automaton with ε-moves](./nfae); and
-- [Finite Pushdown Automaton](./fpa);
+- [Finite Pushdown Automaton](./fpa).
