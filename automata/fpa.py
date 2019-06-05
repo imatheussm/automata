@@ -104,15 +104,16 @@ class finitePushdownAutomaton(finiteAutomaton):
 			Returns a string if to_str == True; otherwise, it just prints it and doesn't return anything.
 		"""
 		string = []
-		column_titles, space = ["δ"] + list(self.properties["symbols"]), max([len(item) for item in self.properties["transitions"].values()]) * 4 + 2
+		column_titles, space = ["δ"] + list(self.properties["symbols"]) + ["?"], max([len(item) for item in self.properties["transitions"].values()]) * 4 + 2
 		column_titles[0] = int((space) / 2) * " " + column_titles[0] + int((space) / 2) * " "
 		for (origins, destinations) in self.properties["transitions"].items():
+			print(origins)
 			if "ε" in origins:
 				column_titles.append("ε")
 				break
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles + ["Γ"]])))
 		i, line, previous_state = 1, [], None
-		for (state, stack_symbol, symbol) in list(product(self.properties["states"],self.properties["stack_symbols"],column_titles[1:])):
+		for (state, stack_symbol, symbol) in list(product(self.properties["states"],list(self.properties["stack_symbols"]) + ["?"],column_titles[1:])):
 			if line == []:
 				if state != previous_state: previous_state, line = state, ["{0}{2:^{1}}".format(body_left_margin * " ",space,state)]
 				else: line = ["{0}{2:^{1}}".format(body_left_margin * " ",space," ")]
