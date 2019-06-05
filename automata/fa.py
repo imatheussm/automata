@@ -133,7 +133,7 @@ class finiteAutomaton:
 		try: return self.properties["transitions"][(current_state,symbol)]
 		except: return None
 
-	def process_word(self,word,current_states=None,verbose=False):
+	def process_word(self,word,verbose=False,current_states=None):
 		"""Checks if a word can be processed by the finiteAutomaton object.
 
 		Parameters
@@ -142,10 +142,10 @@ class finiteAutomaton:
 			An object of the class finiteAutomaton (or any of its subclasses).
 		word : str
 			The word to be processed.
-		current_states : tuple(str), str, NoneType (default = None)
-			The state to be processed. It is actively used throughout the function, since it is recursive.
 		verbose : bool
 			Serves to tell the function if print statements should be displayed as the word is processed.
+		current_states : tuple(str), str, NoneType (default = None)
+			The state to be processed. It is actively used throughout the function, since it is recursive.
 
 		Returns
 		-------
@@ -180,7 +180,7 @@ class finiteAutomaton:
 		del(new_current_states)
 		if len(word) > 1:
 			if verbose == True: print("[LINE 184] Remaining symbols to be processed: {}\n".format(word[1:]))
-			return self.process_word(word[1:],current_states=current_states,verbose=verbose)
+			return self.process_word(word[1:],verbose=verbose,current_states=current_states)
 		else:
 			if verbose == True: print("\n[LINE 187] Final states found: {}\n".format(", ".join(current_states)))
 			for state in current_states:
