@@ -57,9 +57,19 @@ class finitePushdownAutomaton(finiteAutomaton):
 
 		Parameters
 		----------
+		self : finiteAutomaton
+			An object of the class finiteAutomaton (or any of its subclasses).
+		current_state : str
+			The current_state.
+		symbol : str
+			The symbol to be read.
+		stack_symbol : str
+			The symbol to be read from the stack.
 
 		Returns
 		-------
+		tuple: (str, str, ..., str) or NoneType
+			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
 
 		"""
 		return self.process_symbols(current_state,symbol,stack_symbol)
