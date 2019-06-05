@@ -17,5 +17,6 @@ Source: [Wikipedia](https://en.wikipedia.org/wiki/Automata_theory).
 Under this repository you are going to find the following automata:
 
 - [Deterministic Finite Automaton](./dfa);
-- [Nondeterministic Finite Automaton](./nfa); and
-- [Nondeterministic Finite Automaton with ε-moves](./nfae).
+- [Nondeterministic Finite Automaton](./nfa);
+- [Nondeterministic Finite Automaton with ε-moves](./nfae); and
+- [Finite Pushdown Automaton](./fpa);
