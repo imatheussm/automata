@@ -74,9 +74,8 @@ class finitePushdownAutomaton(finiteAutomaton):
 		"""
 		return self.process_symbols(current_state,symbol,stack_symbol)
 
-	def process_symbols(self,current_state,symbol,stack_symbol,current_stack):
+	def process_symbols(self,current_state,symbol,stack_symbol,current_stack=None,repr=True):
 		"""Processes from a state to another, considering the symbol to be consumed in the process.
-
 		Parameters
 		----------
 		self : finiteAutomaton
@@ -87,22 +86,24 @@ class finitePushdownAutomaton(finiteAutomaton):
 			The symbol to be read.
 		stack_symbol : str
 			The symbol to be read from the stack.
-		current_stack : str
-			DEVELOP HERE
-
 		Returns
 		-------
 		tuple: (str, str, ..., str) or NoneType
 			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
 		"""
 		#if isinstance(current_state,tuple) and len(current_state) == 1: current_state = current_state[0]
-		try:
-			result = properties["transitions"][(current_state,symbol,stack_symbol)]
-			if stack_symbol!="ε": return (result[0], current_stack[1:])
-			else: return (result[0], result[1] + current_stack[1:])
-		except: return None
+		if repr==True:
+			try: return self.properties["transitions"][(current_state,symbol,stack_symbol)]
+			except: return None
+		else:
+			try:
+				result = properties["transitions"][(current_state,symbol,stack_symbol)]
+				if stack_symbol!="ε": return (result[0], current_stack)
+				elif result[1]=="ε": return (result[0], current_stack[1:])
+				else: return (result[0], result[1] + current_stack[1:])
+			except: return None
 
-	def process_word(self,word,verbose=False,current_states=None,current_stack=None):
+	def process_word(self,word,verbose=False,current_states=None):
 		"""Checks if a word can be processed by the finiteAutomaton object.
 
 		Parameters
@@ -134,18 +135,30 @@ class finitePushdownAutomaton(finiteAutomaton):
 		"""
 		is_final = False
 
-		if current_states == None: current_states = (self.properties["initial_state"],)
-		if current_stack == None: current_stack = "ε"
-		if verbose == True: print("[LINE 102] Current state (s): {}".format(", ".join(current_states)))
+		if current_states == None: current_states = ((self.properties["initial_state"],""),)
+		if verbose == True: print("[LINE 102] Current state (s): {}".format(current_states))
 
-		for current_state in current_states:
+		for (current_state, current_stack) in current_states:
+			new_states = []
 			# CASO (current_state,"ε","ε")
-
-			# CASO (current_state,"ε",current_stack[0])
-
+			if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", \"ε\")".format(current_state))
+			try: new_states.append(self.process_symbols(current_state,"ε","ε",current_stack))
+			except: pass
 			# CASO (current_state,word[0],"ε")
-
-			# CASO (current_state,word[0],current_stack[0])
+			if verbose==True: print("[LINE 149] Attempting to add ({}, {}, \"ε\")".format(current_state,word[0]))
+			try: new_states.append(self.process_symbols(current_state,word[0],"ε",current_stack))
+			except: pass
+			# CASO (current_state,"ε",current_stack[0])
+			if len(current_stack)>0:
+				if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", {})".format(current_state, current_stack[0]))
+				try: new_states.append(self.process_symbols(current_state,"ε","ε",current_stack))
+				except: pass
+				# CASO (current_state,word[0],current_stack[0])
+				if verbose==True: print("[LINE 156] Attempting to add ({}, {}, {})".format(current_state, word[0], current_stack[0]))
+				try: new_states.append(self.process_symbols(current_state,word[0],current_stack[0]))
+				except: pass
+		print("[LINE 159] Result of this round: {}. Continuing...".format(new_states))
+		return self.process_word(word[1:],verbose,new_states)
 
 	def transitions(self,to_str=False,body_left_margin=0):
 		"""Prints the transitions in a transition table format.
