@@ -74,7 +74,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		"""
 		return self.process_symbols(current_state,symbol,stack_symbol)
 
-	def process_symbols(self,current_state,symbol,stack_symbol):
+	def process_symbols(self,current_state,symbol,stack_symbol,current_stack):
 		"""Processes from a state to another, considering the symbol to be consumed in the process.
 
 		Parameters
@@ -87,6 +87,8 @@ class finitePushdownAutomaton(finiteAutomaton):
 			The symbol to be read.
 		stack_symbol : str
 			The symbol to be read from the stack.
+		current_stack : str
+			DEVELOP HERE
 
 		Returns
 		-------
@@ -94,7 +96,10 @@ class finitePushdownAutomaton(finiteAutomaton):
 			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
 		"""
 		#if isinstance(current_state,tuple) and len(current_state) == 1: current_state = current_state[0]
-		try: return self.properties["transitions"][(current_state,symbol,stack_symbol)]
+		try:
+			result = properties["transitions"][(current_state,symbol,stack_symbol)]
+			if stack_symbol!="ε": return (result[0], current_stack[1:])
+			else: return (result[0], result[1] + current_stack[1:])
 		except: return None
 
 	def process_word(self,word,verbose=False,current_states=None,current_stack=None):
@@ -127,7 +132,20 @@ class finitePushdownAutomaton(finiteAutomaton):
 		- Proceed with the goddamn proof-testing
 			This will be the most delightful (or dreadful and painful) phase: see the returned movements and check manually if they are correct. And I have to do this to every single one of the remaining automaton types.
 		"""
-		raise NotImplementedError("I'm not in the right mindset to do this, lol.")
+		is_final = False
+
+		if current_states == None: current_states = (self.properties["initial_state"],)
+		if current_stack == None: current_stack = "ε"
+		if verbose == True: print("[LINE 102] Current state (s): {}".format(", ".join(current_states)))
+
+		for current_state in current_states:
+			# CASO (current_state,"ε","ε")
+
+			# CASO (current_state,"ε",current_stack[0])
+
+			# CASO (current_state,word[0],"ε")
+
+			# CASO (current_state,word[0],current_stack[0])
 
 	def transitions(self,to_str=False,body_left_margin=0):
 		"""Prints the transitions in a transition table format.
