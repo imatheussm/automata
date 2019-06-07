@@ -26,5 +26,11 @@ l = deterministicFinitePushdownAutomaton(k)
 m = from_txt("./dfa/dfa1.txt")
 n = deterministicFiniteAutomaton(m)
 
+o = from_txt("./fpa/fpa3.txt")
+p = finitePushdownAutomaton(o)
+
+q = from_txt("./fpa/fpa4.txt")
+r = finitePushdownAutomaton(q)
+
 #from itertools import product
 #k_ = list(product(j.properties["states"],j.properties["stack_symbols"],j.properties["symbols"]))
