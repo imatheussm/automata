@@ -101,7 +101,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 				if symbol=="?" and stack_symbol=="?" and current_stack=="": return (result[0],current_stack)
 				if stack_symbol=="ε":
 					if result[1]=="ε": return (result[0], current_stack)
-					else: return (result[0], result[1] + current_stack[1:])
+					else: return (result[0], result[1] + current_stack)
 				else:
 					if result[1]=="ε": return (result[0], current_stack[1:])
 					else: return (result[0], result[1] + current_stack[1:])
@@ -164,34 +164,42 @@ class finitePushdownAutomaton(finiteAutomaton):
 				# CASO (current_state,"ε",current_stack[0])
 				if len(current_stack)>0:
 					if verbose==True: print("[LINE 166] There's something in the stack! Stack: {}".format(current_stack))
-					if verbose==True: print("[LINE 167] Attempting to add ({}, \"ε\", {}). Result: {}".format(current_state,current_stack[0],self.process_symbols(current_state,"ε","ε",current_stack,False)))
-					try: new_states.append(self.process_symbols(current_state,"ε",current_stack[0],current_stack,False))
+					if verbose==True: print("[LINE 167] Attempting to add ({}, \"ε\", {}). Result: {}".format(current_state,current_stack[0],self.process_symbols(current_state,"ε",current_stack[0],current_stack,False)))
+					try:
+						intermediate_state = self.process_symbols(current_state,"ε",current_stack[0],current_stack,False)
+						new_states.append(intermediate_state)
+						if verbose==True: print("[LINE 170] Now, processing ({}, {}, \"ε\"). Result: {}".format(intermediate_state[0], word[0],self.process_symbols(intermediate_state[0],word[0],"ε",intermediate_state[1],False)))
+						try: new_states.append(self.process_symbols(intermediate_state[0],word[0],"ε",intermediate_state[1],False))
+						except: pass
+						if verbose==True: print("[LINE 173] Now, processing ({}, {}, {}). Result: {}".format(intermediate_state[0], word[0], intermediate_state[1][0],self.process_symbols(intermediate_state[0],word[0],intermediate_state[1][0],intermediate_state[1],False)))
+						try: new_states.append(self.process_symbols(intermediate_state[0],word[0],intermediate_state[1][0],intermediate_state[1],False))
+						except: pass
 					except: pass
 					# CASO (current_state,word[0],current_stack[0])
-					if verbose==True: print("[LINE 171] Attempting to add ({}, {}, {}). Result: {}".format(current_state,word[0],current_stack[0],self.process_symbols(current_state,word[0],current_stack[0],current_stack,False)))
+					if verbose==True: print("[LINE 178] Attempting to add ({}, {}, {}). Result: {}".format(current_state,word[0],current_stack[0],self.process_symbols(current_state,word[0],current_stack[0],current_stack,False)))
 					try: new_states.append(self.process_symbols(current_state,word[0],current_stack[0],current_stack,False))
 					except: pass
 			new_states = tuple(set([item for item in new_states if item != None]))
-			if verbose==True: print("[LINE 175] Result of this round: {}.".format(new_states))
+			if verbose==True: print("[LINE 182] Result of this round: {}.".format(new_states))
 			return self.process_word(word[1:],verbose,new_states)
 		else:
 			# CASO (len(word==0))
 			for (current_state, current_stack) in current_states:
-				if verbose==True: print("[LINE 180] The word has been entirely processed. Verifying if the final transition is possible through ({}, \"?\", \"?\")".format(current_state))
+				if verbose==True: print("[LINE 186] The word has been entirely processed. Verifying if the final transition is possible through ({}, \"?\", \"?\")".format(current_state))
 				if (current_state, "?", "?") in self.properties["transitions"].keys():
 					if len(current_stack)==0:
-						if verbose==True: print("[LINE 183] Attempting to add ({}, \"?\", \"?\"). Result: {}".format(current_state,self.process_symbols(current_state,"?","?",current_stack,False)))
+						if verbose==True: print("[LINE 190] Attempting to add ({}, \"?\", \"?\"). Result: {}".format(current_state,self.process_symbols(current_state,"?","?",current_stack,False)))
 						new_states.append(self.process_symbols(current_state,"?","?",current_stack,False))
 
 		for (final_state,final_stack) in new_states:
-			if verbose==True: print("[LINE 187] Evaluating state {}, with stack = {}... ".format(final_state,final_stack),end="")
+			if verbose==True: print("[LINE 194] Evaluating state {}, with stack = {}... ".format(final_state,final_stack),end="")
 			if final_stack=="" and final_state in self.properties["final_states"]:
-				if verbose==True: print("[LINE 189] This state is considered final.")
+				if verbose==True: print("[LINE 196] This state is considered final.")
 				is_final=True
 			else:
-				if verbose==True: print("[LINE 192] This state is not considered final.")
+				if verbose==True: print("[LINE 199] This state is not considered final.")
 
-		if verbose==True: print("[LINE 194] The function returns ", end="")
+		if verbose==True: print("[LINE 201] The function returns ", end="")
 		return is_final
 
 	def transitions(self,to_str=False,body_left_margin=0):
