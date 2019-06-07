@@ -97,7 +97,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 			except: return None
 		else:
 			try:
-				result = properties["transitions"][(current_state,symbol,stack_symbol)]
+				result = self.properties["transitions"][(current_state,symbol,stack_symbol)]
 				if stack_symbol!="ε": return (result[0], current_stack)
 				elif result[1]=="ε": return (result[0], current_stack[1:])
 				else: return (result[0], result[1] + current_stack[1:])
@@ -136,27 +136,38 @@ class finitePushdownAutomaton(finiteAutomaton):
 		is_final = False
 
 		if current_states == None: current_states = ((self.properties["initial_state"],""),)
-		if verbose == True: print("[LINE 102] Current state (s): {}".format(current_states))
 
+		new_states = []
 		for (current_state, current_stack) in current_states:
-			new_states = []
-			# CASO (current_state,"ε","ε")
-			if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", \"ε\")".format(current_state))
-			try: new_states.append(self.process_symbols(current_state,"ε","ε",current_stack))
-			except: pass
-			# CASO (current_state,word[0],"ε")
-			if verbose==True: print("[LINE 149] Attempting to add ({}, {}, \"ε\")".format(current_state,word[0]))
-			try: new_states.append(self.process_symbols(current_state,word[0],"ε",current_stack))
-			except: pass
-			# CASO (current_state,"ε",current_stack[0])
-			if len(current_stack)>0:
-				if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", {})".format(current_state, current_stack[0]))
-				try: new_states.append(self.process_symbols(current_state,"ε","ε",current_stack))
+			if verbose==True: print("[LINE 142] current_state: {} | current_stack: {} | word: {}".format(current_state,current_stack,word))
+			# CASO (len(word==0))
+			if len(word)==0:
+				if verbose==True: print("The word has been entirely processed. Verifying if the final transition is possible...")
+				if (current_state, "?", "?") in self.properties["transitions"].keys():
+					if len(current_stack)==0:
+						new_states.append(self.process_symbols(current_state,"?","?",current_stack,False))
+				else: return False
+			else:
+				# CASO (current_state,"ε","ε")
+				if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", \"ε\"). Result: {}".format(current_state,self.process_symbols(current_state,"ε","ε",current_stack,False)))
+				try: new_states.append(self.process_symbols(current_state,"ε","ε",current_stack,False))
 				except: pass
-				# CASO (current_state,word[0],current_stack[0])
-				if verbose==True: print("[LINE 156] Attempting to add ({}, {}, {})".format(current_state, word[0], current_stack[0]))
-				try: new_states.append(self.process_symbols(current_state,word[0],current_stack[0]))
+				# CASO (current_state,word[0],"ε")
+				if verbose==True: print("[LINE 149] Attempting to add ({}, {}, \"ε\"). Result: {}".format(current_state,word[0],self.process_symbols(current_state,word[0],"ε",current_stack,False)))
+				try: new_states.append(self.process_symbols(current_state,word[0],"ε",current_stack,False))
 				except: pass
+				# CASO (current_state,"ε",current_stack[0])
+				if len(current_stack)>0:
+					if verbose==True: print("[LINE 153] There's something in the stack! Stack: {}".format(current_stack))
+					if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", {}). Result: {}".format(current_state,current_stack[0],self.process_symbols(current_state,"ε","ε",current_stack,False)))
+					try: new_states.append(self.process_symbols(current_state,"ε",current_stack[0],current_stack,False))
+					except: pass
+					# CASO (current_state,word[0],current_stack[0])
+					if verbose==True: print("[LINE 156] Attempting to add ({}, {}, {}). Result: {}".format(current_state,word[0],current_stack[0],self.process_symbols(current_state,word[0],current_stack[0],current_stack,False)))
+					try: new_states.append(self.process_symbols(current_state,word[0],current_stack[0],current_stack,False))
+					except: pass
+
+		new_states = [item for item in new_states if item != None]
 		print("[LINE 159] Result of this round: {}. Continuing...".format(new_states))
 		return self.process_word(word[1:],verbose,new_states)
 
