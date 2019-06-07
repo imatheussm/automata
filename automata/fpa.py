@@ -147,7 +147,15 @@ class finitePushdownAutomaton(finiteAutomaton):
 				if verbose==True: print("\n[LINE 142] current_state: {} | current_stack: {} | word: {}".format(current_state,current_stack,word))
 				# CASO (current_state,"ε","ε")
 				if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", \"ε\"). Result: {}".format(current_state,self.process_symbols(current_state,"ε","ε",current_stack,False)))
-				try: new_states.append(self.process_symbols(current_state,"ε","ε",current_stack,False))
+				try:
+					intermediate_state = self.process_symbols(current_state,"ε","ε",current_stack,False)
+					if verbose==True: print("[LINE 152] Now, processing ({}, {}, \"ε\")".format(intermediate_state[0], word[0], "ε", intermediate_state[1],False))
+					try: new_states.append(self.process_symbols(intermediate_state[0],word[0],"ε",intermediate_state[1],False))
+					except: pass
+					if verbose==True: print("[LINE 152] Now, processing ({}, {}, {})".format(intermediate_state[0], word[0], intermediate_state[1][0], intermediate_state[1],False))
+					try: new_states.append(self.process_symbols(intermediate_state[0],word[0],intermediate_state[1][0],intermediate_state[1],False))
+					except: pass
+
 				except: pass
 				# CASO (current_state,word[0],"ε")
 				if verbose==True: print("[LINE 149] Attempting to add ({}, {}, \"ε\"). Result: {}".format(current_state,word[0],self.process_symbols(current_state,word[0],"ε",current_stack,False)))
@@ -205,10 +213,14 @@ class finitePushdownAutomaton(finiteAutomaton):
 		string = []
 		column_titles, stack_symbols, space = ["δ"] + list(self.properties["symbols"]) + ["?"], list(self.properties["stack_symbols"]) + ["?"], max([len(item) for item in self.properties["transitions"].values()]) * 4 + 2
 		column_titles[0] = int((space) / 2) * " " + column_titles[0] + int((space) / 2) * " "
-		for (origins, destinations) in self.properties["transitions"].items():
-			#print(origins)
-			if "ε" in origins[:-1]: column_titles.append("ε")
-			elif "ε" in origins[-1]: stack_symbols.append("ε")
+		for origins in self.properties["transitions"].keys():
+			if origins[1]=="ε":
+				column_titles.append("ε")
+				break
+		for origins in self.properties["transitions"].keys():
+			if origins[2]=="ε":
+				stack_symbols.append("ε")
+				break
 
 		string.append(str("|".join(["{1:^{0}}".format(space,element) for element in column_titles + ["Γ"]])))
 		i, line, previous_state = 1, [], None
