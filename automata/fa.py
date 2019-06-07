@@ -112,7 +112,7 @@ class finiteAutomaton:
 		if to_str == True: return string
 		else: print(string)
 
-	def process_symbol(self,current_state,symbol):
+	def process_symbol(self,current_states,symbol):
 		"""Processes from a state to another, considering the symbol to be consumed in the process.
 
 		Parameters
@@ -129,9 +129,20 @@ class finiteAutomaton:
 		tuple: (str, str, ..., str) or NoneType
 			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
 		"""
-		if isinstance(current_state,tuple) and len(current_state) == 1: current_state = current_state[0]
-		try: return self.properties["transitions"][(current_state,symbol)]
-		except: return None
+		if isinstance(current_states,tuple):
+			if len(current_states) == 1:
+				current_states = current_states[0]
+				try: return self.properties["transitions"][(current_states,symbol)]
+				except: return None
+			else:
+				new_states = []
+				for current_state in current_states:
+					try: new_states += self.properties["transitions"][(current_state,symbol)]
+					except: pass
+				return tuple(set(new_states))
+		else:
+			try: return self.properties["transitions"][(current_states,symbol)]
+			except: return None
 
 	def process_word(self,word,verbose=False,current_states=None):
 		"""Checks if a word can be processed by the finiteAutomaton object.
