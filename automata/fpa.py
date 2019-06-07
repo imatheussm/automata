@@ -144,54 +144,54 @@ class finitePushdownAutomaton(finiteAutomaton):
 		new_states = []
 		if len(word)>0:
 			for (current_state, current_stack) in current_states:
-				if verbose==True: print("\n[LINE 142] current_state: {} | current_stack: {} | word: {}".format(current_state,current_stack,word))
+				if verbose==True: print("\n[LINE 147] current_state: {} | current_stack: {} | word: {}".format(current_state,current_stack,word))
 				# CASO (current_state,"ε","ε")
-				if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", \"ε\"). Result: {}".format(current_state,self.process_symbols(current_state,"ε","ε",current_stack,False)))
+				if verbose==True: print("[LINE 149] Attempting to add ({}, \"ε\", \"ε\"). Result: {}".format(current_state,self.process_symbols(current_state,"ε","ε",current_stack,False)))
 				try:
 					intermediate_state = self.process_symbols(current_state,"ε","ε",current_stack,False)
-					if verbose==True: print("[LINE 152] Now, processing ({}, {}, \"ε\")".format(intermediate_state[0], word[0], "ε", intermediate_state[1],False))
+					new_states.append(intermediate_state)
+					if verbose==True: print("[LINE 152] Now, processing ({}, {}, \"ε\"). Result: {}".format(intermediate_state[0], word[0],self.process_symbols(intermediate_state[0],word[0],"ε",intermediate_state[1],False)))
 					try: new_states.append(self.process_symbols(intermediate_state[0],word[0],"ε",intermediate_state[1],False))
 					except: pass
-					if verbose==True: print("[LINE 152] Now, processing ({}, {}, {})".format(intermediate_state[0], word[0], intermediate_state[1][0], intermediate_state[1],False))
+					if verbose==True: print("[LINE 155] Now, processing ({}, {}, {}). Result: {}".format(intermediate_state[0], word[0], intermediate_state[1][0],self.process_symbols(intermediate_state[0],word[0],intermediate_state[1][0],intermediate_state[1],False)))
 					try: new_states.append(self.process_symbols(intermediate_state[0],word[0],intermediate_state[1][0],intermediate_state[1],False))
 					except: pass
-
 				except: pass
 				# CASO (current_state,word[0],"ε")
-				if verbose==True: print("[LINE 149] Attempting to add ({}, {}, \"ε\"). Result: {}".format(current_state,word[0],self.process_symbols(current_state,word[0],"ε",current_stack,False)))
+				if verbose==True: print("[LINE 161] Attempting to add ({}, {}, \"ε\"). Result: {}".format(current_state,word[0],self.process_symbols(current_state,word[0],"ε",current_stack,False)))
 				try: new_states.append(self.process_symbols(current_state,word[0],"ε",current_stack,False))
 				except: pass
 				# CASO (current_state,"ε",current_stack[0])
 				if len(current_stack)>0:
-					if verbose==True: print("[LINE 153] There's something in the stack! Stack: {}".format(current_stack))
-					if verbose==True: print("[LINE 145] Attempting to add ({}, \"ε\", {}). Result: {}".format(current_state,current_stack[0],self.process_symbols(current_state,"ε","ε",current_stack,False)))
+					if verbose==True: print("[LINE 166] There's something in the stack! Stack: {}".format(current_stack))
+					if verbose==True: print("[LINE 167] Attempting to add ({}, \"ε\", {}). Result: {}".format(current_state,current_stack[0],self.process_symbols(current_state,"ε","ε",current_stack,False)))
 					try: new_states.append(self.process_symbols(current_state,"ε",current_stack[0],current_stack,False))
 					except: pass
 					# CASO (current_state,word[0],current_stack[0])
-					if verbose==True: print("[LINE 156] Attempting to add ({}, {}, {}). Result: {}".format(current_state,word[0],current_stack[0],self.process_symbols(current_state,word[0],current_stack[0],current_stack,False)))
+					if verbose==True: print("[LINE 171] Attempting to add ({}, {}, {}). Result: {}".format(current_state,word[0],current_stack[0],self.process_symbols(current_state,word[0],current_stack[0],current_stack,False)))
 					try: new_states.append(self.process_symbols(current_state,word[0],current_stack[0],current_stack,False))
 					except: pass
 			new_states = tuple(set([item for item in new_states if item != None]))
-			if verbose==True: print("[LINE 159] Result of this round: {}.".format(new_states))
+			if verbose==True: print("[LINE 175] Result of this round: {}.".format(new_states))
 			return self.process_word(word[1:],verbose,new_states)
 		else:
 			# CASO (len(word==0))
 			for (current_state, current_stack) in current_states:
-				if verbose==True: print("The word has been entirely processed. Verifying if the final transition is possible through ({}, \"?\", \"?\")".format(current_state))
+				if verbose==True: print("[LINE 180] The word has been entirely processed. Verifying if the final transition is possible through ({}, \"?\", \"?\")".format(current_state))
 				if (current_state, "?", "?") in self.properties["transitions"].keys():
 					if len(current_stack)==0:
-						if verbose==True: print("[LINE 145] Attempting to add ({}, \"?\", \"?\"). Result: {}".format(current_state,self.process_symbols(current_state,"?","?",current_stack,False)))
+						if verbose==True: print("[LINE 183] Attempting to add ({}, \"?\", \"?\"). Result: {}".format(current_state,self.process_symbols(current_state,"?","?",current_stack,False)))
 						new_states.append(self.process_symbols(current_state,"?","?",current_stack,False))
 
 		for (final_state,final_stack) in new_states:
-			if verbose==True: print("Evaluating state {}, with stack = {}... ".format(final_state,final_stack),end="")
+			if verbose==True: print("[LINE 187] Evaluating state {}, with stack = {}... ".format(final_state,final_stack),end="")
 			if final_stack=="" and final_state in self.properties["final_states"]:
-				if verbose==True: print("This state is considered final.")
+				if verbose==True: print("[LINE 189] This state is considered final.")
 				is_final=True
 			else:
-				if verbose==True: print("This state is not considered final.")
+				if verbose==True: print("[LINE 192] This state is not considered final.")
 
-		if verbose==True: print("The function returns ", end="")
+		if verbose==True: print("[LINE 194] The function returns ", end="")
 		return is_final
 
 	def transitions(self,to_str=False,body_left_margin=0):
