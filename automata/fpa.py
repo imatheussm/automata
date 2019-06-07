@@ -163,8 +163,8 @@ class finitePushdownAutomaton(finiteAutomaton):
 					if verbose==True: print("[LINE 156] Attempting to add ({}, {}, {}). Result: {}".format(current_state,word[0],current_stack[0],self.process_symbols(current_state,word[0],current_stack[0],current_stack,False)))
 					try: new_states.append(self.process_symbols(current_state,word[0],current_stack[0],current_stack,False))
 					except: pass
-			new_states = [item for item in new_states if item != None]
-			print("[LINE 159] Result of this round: {}.".format(new_states))
+			new_states = tuple(set([item for item in new_states if item != None]))
+			if verbose==True: print("[LINE 159] Result of this round: {}.".format(new_states))
 			return self.process_word(word[1:],verbose,new_states)
 		else:
 			# CASO (len(word==0))
