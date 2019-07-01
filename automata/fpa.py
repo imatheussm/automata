@@ -52,7 +52,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		if to_str == True: return string
 		else: print(string)
 
-	def process_symbol(self,current_state,symbol,stack_symbol):
+	def process_symbol(self,current_state,symbol,stack_symbol,current_stack=None,repr=True):
 		"""Redirection to finitePushdownAutomaton.process_symbols() meant to overwrite the superclass' implementation.
 
 		Parameters
@@ -72,7 +72,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
 
 		"""
-		return self.process_symbols(current_state,symbol,stack_symbol)
+		return self.process_symbols(current_state,symbol,stack_symbol,current_stack,repr)
 
 	def process_symbols(self,current_state,symbol,stack_symbol,current_stack=None,repr=True):
 		"""Processes from a state to another, considering the symbol to be consumed in the process.
@@ -82,8 +82,8 @@ class finitePushdownAutomaton(finiteAutomaton):
 			An object of the class finiteAutomaton (or any of its subclasses).
 		current_state : str
 			The current_state.
-		symbol : str
-			The symbol to be read.
+		symbol : str, tuple(str)
+			The symbol (or symbols) to be read.
 		stack_symbol : str
 			The symbol to be read from the stack.
 		Returns
@@ -119,24 +119,13 @@ class finitePushdownAutomaton(finiteAutomaton):
 			The word to be processed.
 		verbose : bool (default = False)
 			Serves to tell the function if print statements should be displayed as the word is processed.
-		current_states : tuple(str), str, NoneType (default = None)
+		current_states : tuple(str), NoneType (default = None)
 			The states remaining to be processed. It is actively used throughout the function, since it is recursive.
-		current_stack : str, NoneType (default = None)
-			The content of the stack. It is actively used throughout the function, since it is recursive.
 
 		Returns
 		-------
 		bool
 			The result of the processing. In other words: if the word has been accepted by the automaton or not.
-
-		To-do
-		-----
-		- Contemplate the empty stack-reads along with the empty word-reads
-			This will be tricky, since there is four possibilities (len((symbol, empty))*len((empty, symbol))). To do this, I have to verify the existance of ε-moves word- and stack-related. More complexity!
-		- Implement more verbose prints (stack status as well!)
-			I would do this anyway, since it will be far less painful to debug as I develop this function. Among these stack prints, I will have to print the stack as well, which is another element worth verifying. For the sake of convenience, it must have a pointer to the top of the stack, to avoid misinterpreting conventions by both my and my professor's part.
-		- Proceed with the goddamn proof-testing
-			This will be the most delightful (or dreadful and painful) phase: see the returned movements and check manually if they are correct. And I have to do this to every single one of the remaining automaton types.
 		"""
 		is_final = False
 
@@ -145,7 +134,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		new_states = []
 		if len(word) > 0:
 			for (current_state, current_stack) in current_states:
-				if verbose == True: print("[LINE 147] current_state: {} | current_stack: {} | word: {}\n\n".format(current_state,current_stack if len(current_stack)>0 else "ε",word))
+				if verbose == True: print("[LINE 147] current_state: {} | current_stack: {} | word: {}\n\n".format(current_state,current_stack if len(current_stack) > 0 else "ε",word))
 				# CASO (current_state,"ε","ε")
 				if verbose == True: print("[LINE 149] Attempting to process δ({}, ε, ε). Result: {}".format(current_state,self.process_symbols(current_state,"ε","ε",current_stack,False)))
 				try:
@@ -183,7 +172,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 			if verbose == True:
 				print("[LINE 182] After processing the symbol \"{}\", the results are as follows:".format(word[0]))
 				print("\n{:>5} | {}".format("STATE","STACK"))
-				for (new_state, new_stack) in new_states: print("{:>5} | {}".format(new_state,new_stack if len(new_stack)>0 else "ε"))
+				for (new_state, new_stack) in new_states: print("{:>5} | {}".format(new_state,new_stack if len(new_stack) > 0 else "ε"))
 			print("\n---\n")
 			return self.process_word(word[1:],verbose,new_states)
 		else:
@@ -198,10 +187,10 @@ class finitePushdownAutomaton(finiteAutomaton):
 
 		for (final_state,final_stack) in new_states:
 			if final_stack == "" and final_state in self.properties["final_states"]:
-				if verbose == True: print("[LINE 202] The state {}, with stack {}, is considered final.".format(final_state,final_stack if len(final_stack)>0 else "ε"))
+				if verbose == True: print("[LINE 202] The state {}, with stack {}, is considered final.".format(final_state,final_stack if len(final_stack) > 0 else "ε"))
 				is_final = True
 			else:
-				if verbose == True: print("[LINE 205] The state {}, with stack {}, is not considered final.".format(final_state,final_stack if len(final_stack)>0 else "ε"))
+				if verbose == True: print("[LINE 205] The state {}, with stack {}, is not considered final.".format(final_state,final_stack if len(final_stack) > 0 else "ε"))
 
 		if verbose == True: print("[LINE 201] The function returns ", end="")
 		return is_final
