@@ -32,6 +32,10 @@ def from_txt(automaton,verbose=False):
 		# Opening the file and obtaining the automaton file's properties line
 		if verbose == True: print("[LINE 32] File opened.")
 		properties_string = file.readline().strip("\n")[1:-1]
+
+		for character in properties_string:
+			if character == "-": properties_string = properties_string.replace("-", "ε")
+
 		if verbose == True: print("[LINE 34] Properties line: {}".format(properties_string))
 		if properties_string[0] != "{" or properties_string[-1] != "}": raise SyntaxError("The automaton properties tuple ({}) is incorrectly formatted.".format(properties_string))
 
@@ -73,6 +77,12 @@ def from_txt(automaton,verbose=False):
 		# Processing the transitions
 		transitions = {}
 		transition_strings = [item.strip("\n").split(", ") for item in file.readlines()]
+
+		# print("transition_strings before: {}".format(transition_strings))
+		for transition_string in transition_strings:
+			for i in range(len(transition_string)):
+					if transition_string[i] == "-": transition_string[i] = "ε"
+		# print("transition_strings after: {}".format(transition_strings))
 
 		if properties["stack_symbols"]=="":
 			del(properties["stack_symbols"])
