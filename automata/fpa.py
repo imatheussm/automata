@@ -173,11 +173,11 @@ class finitePushdownAutomaton(finiteAutomaton):
 				print("[LINE 182] After processing the symbol \"{}\", the results are as follows:".format(word[0]))
 				print("\n{:>5} | {}".format("STATE","STACK"))
 				for (new_state, new_stack) in new_states: print("{:>5} | {}".format(new_state,new_stack if len(new_stack) > 0 else "ε"))
-			print("\n---\n")
+				print("\n---\n")
 			return self.process_word(word[1:],verbose,new_states)
 		else:
 			# CASO (len(word==0))
-			print("[LINE 191] The word has been entirely processed.\n\n")
+			if verbose == True: print("[LINE 191] The word has been entirely processed.\n\n")
 			for (current_state, current_stack) in current_states:
 				if verbose == True: print("Verifying if the final transition is possible through ({}, \"?\", \"?\")".format(current_state))
 				if (current_state, "?", "?") in self.properties["transitions"].keys():
