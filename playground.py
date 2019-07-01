@@ -20,8 +20,14 @@ h = nondeterministicFiniteAutomatonWithEMoves(g)
 i = from_txt("./fpa/fpa1.txt")
 j = deterministicFinitePushdownAutomaton(i)
 
+i2 = from_txt("./fpa/fpa1_dashed.txt")
+j2 = deterministicFinitePushdownAutomaton(i2)
+
 k = from_txt("./fpa/fpa2.txt")
 l = deterministicFinitePushdownAutomaton(k)
+
+k2 = from_txt("./fpa/fpa2_dashed.txt")
+l2 = deterministicFinitePushdownAutomaton(k2)
 
 m = from_txt("./dfa/dfa1.txt")
 n = deterministicFiniteAutomaton(m)
@@ -29,8 +35,14 @@ n = deterministicFiniteAutomaton(m)
 o = from_txt("./fpa/fpa3.txt")
 p = finitePushdownAutomaton(o)
 
+o2 = from_txt("./fpa/fpa3_dashed.txt")
+p2 = finitePushdownAutomaton(o2)
+
 q = from_txt("./fpa/fpa4.txt")
 r = finitePushdownAutomaton(q)
+
+q2 = from_txt("./fpa/fpa4_dashed.txt")
+r2 = finitePushdownAutomaton(q2)
 
 #from itertools import product
 #k_ = list(product(j.properties["states"],j.properties["stack_symbols"],j.properties["symbols"]))
