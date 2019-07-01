@@ -52,7 +52,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		if to_str == True: return string
 		else: print(string)
 
-	def process_symbol(self,current_state,symbol,stack_symbol,current_stack=None,repr=True):
+	def process_symbol(self,current_state,symbol,stack_symbol,current_stack=None,repr=True, verbose=False):
 		"""Redirection to finitePushdownAutomaton.process_symbols() meant to overwrite the superclass' implementation.
 
 		Parameters
@@ -60,36 +60,36 @@ class finitePushdownAutomaton(finiteAutomaton):
 		self : finiteAutomaton
 			An object of the class finiteAutomaton (or any of its subclasses).
 		current_state : str
-			The current_state.
-		symbol : str
-			The symbol to be read.
+			The current_state. When repr = False, this parameter is not used.
+		symbol : str, tuple(str)
+			The symbol (or symbols) to be read. When repr = False, the entire word shall be provided, because the method will make the proper changes and return them afterwards.
 		stack_symbol : str
-			The symbol to be read from the stack.
-
+			The symbol to be read from the stack. This is very important.
 		Returns
 		-------
-		tuple: (str, str, ..., str) or NoneType
-			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
+		tuple: ((new_state,new_word,new_stack),...)
+			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned when repr = True, and an empty tuple will be returned when repr = False.
 
 		"""
-		return self.process_symbols(current_state,symbol,stack_symbol,current_stack,repr)
+		return self.process_symbols(current_state,symbol,stack_symbol,current_stack,repr,verbose)
 
 	def process_symbols(self,current_state,symbol,stack_symbol,current_stack=None,repr=True,verbose=False):
 		"""Processes from a state to another, considering the symbol to be consumed in the process.
+
 		Parameters
 		----------
 		self : finiteAutomaton
 			An object of the class finiteAutomaton (or any of its subclasses).
 		current_state : str
-			The current_state.
+			The current_state. When repr = False, this parameter is not used.
 		symbol : str, tuple(str)
-			The symbol (or symbols) to be read.
+			The symbol (or symbols) to be read. When repr = False, the entire word shall be provided, because the method will make the proper changes and return them afterwards.
 		stack_symbol : str
-			The symbol to be read from the stack.
+			The symbol to be read from the stack. This is very important.
 		Returns
 		-------
-		tuple: (str, str, ..., str) or NoneType
-			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned.
+		tuple: ((new_state,new_word,new_stack),...)
+			A tuple containing the new states. If the symbol cannot be processed from the current_state provided, None will be returned when repr = True, and an empty tuple will be returned when repr = False.
 		"""
 		#if isinstance(current_state,tuple) and len(current_state) == 1:
 		#current_state = current_state[0]
@@ -172,7 +172,7 @@ class finitePushdownAutomaton(finiteAutomaton):
 		self : finiteAutomaton
 			An object of the class finiteAutomaton (or any of its subclasses).
 		word : str
-			The word to be processed.
+			The word to be processed. This is only used in the first iteraction, since the changed words are now present into each new state tuple.
 		verbose : bool (default = False)
 			Serves to tell the function if print statements should be displayed as the word is processed.
 		current_states : tuple(str), NoneType (default = None)
