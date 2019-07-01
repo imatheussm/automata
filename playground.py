@@ -44,5 +44,8 @@ r = finitePushdownAutomaton(q)
 q2 = from_txt("./fpa/fpa4_dashed.txt")
 r2 = finitePushdownAutomaton(q2)
 
+eduardo1 = from_txt("D:\igor\OneDrive\Documentos\GitHub\hephaestus\samples\mirror.automat")
+eduardo2 = finitePushdownAutomaton(eduardo1)
+
 #from itertools import product
 #k_ = list(product(j.properties["states"],j.properties["stack_symbols"],j.properties["symbols"]))
