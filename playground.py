@@ -41,6 +41,8 @@ p2 = finitePushdownAutomaton(o2)
 q = from_txt("./fpa/fpa4.txt")
 r = finitePushdownAutomaton(q)
 
+
+# a^mb^na^(m+n)
 q2 = from_txt("./fpa/fpa4_dashed.txt")
 r2 = finitePushdownAutomaton(q2)
 
